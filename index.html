@@ -1529,56 +1529,62 @@ window.showLeaderboard = function() {
 }
 
 // Load leaderboard
-async function loadLeaderboard() {
-    try {
-        const user = auth.currentUser;
-        const userRef = ref(db, `users/${user.uid}`);
-        const userSnapshot = await get(userRef);
+function loadLeaderboard() {
+    const user = auth.currentUser;
+    const userRef = ref(db, `users/${user.uid}`);
+    get(userRef).then((userSnapshot) => {
         const userData = userSnapshot.val();
         const schoolCode = userData.schoolCode;
-
         const leaderboardRef = ref(db, `schools/${schoolCode}/leaderboard`);
-        const snapshot = await get(leaderboardRef);
-        const leaderboardList = document.getElementById('leaderboard-list');
-        leaderboardList.innerHTML = ''; // Clear the list first
+        
+        onValue(leaderboardRef, (snapshot) => {
+            const leaderboardList = document.getElementById('leaderboard-list');
+            leaderboardList.innerHTML = '';
 
-        const leaderboardData = [];
-        snapshot.forEach((childSnapshot) => {
-            leaderboardData.push({
-                uid: childSnapshot.key,
-                ...childSnapshot.val()
+            const leaderboardData = [];
+            snapshot.forEach((childSnapshot) => {
+                leaderboardData.push({
+                    uid: childSnapshot.key,
+                    ...childSnapshot.val()
+                });
+            });
+
+            leaderboardData.sort((a, b) => b.points - a.points);
+
+            leaderboardData.forEach((entry, index) => {
+                const listItem = document.createElement('div');
+                listItem.className = 'neumorphic p-4 mb-4';
+                listItem.innerHTML = `
+                    <span class="font-bold">#${index + 1}</span>
+                    <span class="ml-4">${entry.name}</span>
+                    <span class="float-right">${entry.points} points</span>
+                    <div class="mt-2">
+                        ${entry.badges ? entry.badges.map(badge => `<span class="inline-block bg-blue-200 rounded-full px-3 py-1 text-sm font-semibold text-blue-700 mr-2 mb-2">${badge}</span>`).join('') : ''}
+                    </div>
+                `;
+                leaderboardList.appendChild(listItem);
             });
         });
-
-        // Sort leaderboard by points in descending order
-        leaderboardData.sort((a, b) => b.points - a.points);
-
-        leaderboardData.forEach((entry, index) => {
-            const listItem = document.createElement('div');
-            listItem.className = 'neumorphic p-4 mb-4';
-            listItem.innerHTML = `
-                <span class="font-bold">#${index + 1}</span>
-                <span class="ml-4">${entry.name}</span>
-                <span class="float-right">${entry.points} points</span>
-            `;
-            leaderboardList.appendChild(listItem);
-        });
-    } catch (error) {
-        console.error('Failed to load leaderboard:', error);
-    }
+    });
 }
-
 // Show points award (for teachers)
 window.showPointsAward = function() {
     const mainContent = document.getElementById('main-content');
     mainContent.innerHTML = `
-        <h2 class="text-2xl font-bold mb-4">Award Points</h2>
+        <h2 class="text-2xl font-bold mb-4">Award Points and Badges</h2>
         <select id="student-list" class="neumorphic-inset w-full p-2 mb-4"></select>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 gap-4 mb-4">
             <button onclick="awardPoints(10)" class="neumorphic-button">+10 points</button>
             <button onclick="awardPoints(-10)" class="neumorphic-button">-10 points</button>
             <button onclick="awardPoints(50)" class="neumorphic-button">+50 points</button>
             <button onclick="awardPoints(-50)" class="neumorphic-button">-50 points</button>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Award Badges</h3>
+        <div class="grid grid-cols-2 gap-4">
+            <button onclick="awardBadge('First to Answer')" class="neumorphic-button">First to Answer</button>
+            <button onclick="awardBadge('Problem Solver')" class="neumorphic-button">Problem Solver</button>
+            <button onclick="awardBadge('Team Player')" class="neumorphic-button">Team Player</button>
+            <button onclick="awardBadge('Critical Thinker')" class="neumorphic-button">Critical Thinker</button>
         </div>
     `;
     loadStudentList();
@@ -1641,23 +1647,59 @@ window.awardPoints = async function(points) {
     }
 }
 
-// Show student progress
-window.showProgress = async function() {
-    const user = auth.currentUser;
-    try {
-        const userRef = ref(db, `users/${user.uid}`);
-        const snapshot = await get(userRef);
-        const userData = snapshot.val();
+// Award badges to students (for teachers)
+window.awardBadge = async function(badgeName) {
+    const studentId = document.getElementById('student-list').value;
+    if (!studentId) {
+        alert('Please select a student');
+        return;
+    }
 
+    try {
+        const studentRef = ref(db, `users/${studentId}`);
+        const studentSnapshot = await get(studentRef);
+        const studentData = studentSnapshot.val();
+
+        let badges = studentData.badges || [];
+        if (!badges.includes(badgeName)) {
+            badges.push(badgeName);
+            await update(studentRef, { badges: badges });
+
+            // Update leaderboard with new badge
+            const leaderboardRef = ref(db, `schools/${studentData.schoolCode}/leaderboard/${studentId}`);
+            await update(leaderboardRef, { badges: badges });
+
+            alert(`Badge "${badgeName}" awarded to ${studentData.fullName}`);
+        } else {
+            alert(`${studentData.fullName} already has the "${badgeName}" badge.`);
+        }
+    } catch (error) {
+        console.error('Failed to award badge:', error);
+        alert('Failed to award badge. Please try again.');
+    }
+}
+
+// Show student progress
+window.showProgress = function() {
+    const user = auth.currentUser;
+    const userRef = ref(db, `users/${user.uid}`);
+    
+    onValue(userRef, (snapshot) => {
+        const userData = snapshot.val();
         const mainContent = document.getElementById('main-content');
+        
+        const level = Math.floor(userData.points / 100) + 1;
+        const progress = (userData.points % 100);
+
         mainContent.innerHTML = `
             <h2 class="text-2xl font-bold mb-4">My Progress</h2>
             <div class="neumorphic p-4 mb-4">
                 <p>Total Points: ${userData.points || 0}</p>
+                <p>Level: ${level}</p>
                 <div class="progress-bar mt-2">
-                    <div class="progress" style="width: ${(userData.points % 100)}%;"></div>
+                    <div class="progress" style="width: ${progress}%;"></div>
                 </div>
-                <p class="mt-2">Level: ${Math.floor(userData.points / 100) + 1}</p>
+                <p class="mt-2">Progress to next level: ${progress}%</p>
             </div>
             <h3 class="text-xl font-bold mb-2">Badges</h3>
             <div id="badges-list" class="grid grid-cols-3 gap-4"></div>
@@ -1674,11 +1716,8 @@ window.showProgress = async function() {
         } else {
             badgesList.innerHTML = '<p>No badges earned yet.</p>';
         }
-    } catch (error) {
-        console.error('Failed to load progress:', error);
-    }
+    });
 }
-
 // Autonomy Mode Functions
 
 // Show theme selection
