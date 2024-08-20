@@ -1,0 +1,2657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamEng!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+       /* General Styles */
+/* General Styles */
+/* General Styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --bg-color: linear-gradient(135deg, #FFA500, #FFFFFF, #4169E1);
+    --text-color: #1a202c;
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --card-text: #1a202c;
+    --sidebar-bg: #4169E1;
+    --sidebar-text: #FFFFFF;
+    --primary-color: #4169E1;
+    --secondary-color: #FFA500;
+    --accent-color: #FF6347;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+/* Neumorphic Styles */
+.neumorphic {
+    background: var(--card-bg);
+    border-radius: 15px;
+    box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1), -8px -8px 15px rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+}
+
+.neumorphic:hover {
+    transform: translateY(-5px);
+    box-shadow: 12px 12px 20px rgba(0, 0, 0, 0.15), -12px -12px 20px rgba(255, 255, 255, 0.6);
+}
+
+.neumorphic-inset {
+    background: var(--card-bg);
+    box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.1), inset -5px -5px 10px rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.neumorphic-inset:focus {
+    box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.1), inset -3px -3px 6px rgba(255, 255, 255, 0.5);
+}
+
+/* Bubbly Button */
+/* Bubbly Button */
+.neumorphic-button, button {
+    background: var(--primary-color);
+    color: white !important; /* Force white text color */
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.neumorphic-button:hover, button:hover {
+    background: var(--secondary-color);
+    color: var(--text-color) !important; /* Change text color on hover for contrast */
+    transform: translateY(-3px);
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Ensure all text within buttons is white */
+.neumorphic-button *, button * {
+    color: white !important;
+}
+
+/* Badge buttons */
+.badge-buttons button {
+    background: var(--secondary-color);
+    color: var(--text-color) !important; /* Ensure contrast on badge buttons */
+}
+
+.badge-buttons button:hover {
+    background: var(--accent-color);
+    color: white !important;
+}
+
+/* Sidebar buttons */
+#sidebar ul li a {
+    color: white !important;
+}
+
+#sidebar ul li a:hover, #sidebar ul li a.active {
+    color: var(--text-color) !important;
+}
+
+/* Specific color adjustments */
+.text-indigo-600 {
+    color: var(--primary-color);
+}
+
+/* Override any conflicting styles */
+.neumorphic-button.text-indigo-600,
+button.text-indigo-600,
+.neumorphic-button .text-indigo-600,
+button .text-indigo-600 {
+    color: white !important;
+}
+
+/* Ensure logout button text is visible */
+button[onclick="logout()"] {
+    color: white !important;
+}
+
+button[onclick="logout()"]:hover {
+    color: var(--text-color) !important;
+}
+/* Progress Bar */
+.progress-bar {
+    background: var(--card-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    height: 20px;
+    margin: 10px 0;
+}
+
+.progress {
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    box-shadow: 0 0 10px var(--primary-color);
+    border-radius: 10px;
+    transition: width 0.5s ease-in-out;
+    height: 100%;
+}
+
+/* Sidebar */
+#sidebar {
+    background: var(--sidebar-bg);
+    border-right: none;
+    color: var(--sidebar-text);
+    padding: 20px;
+    border-radius: 0 20px 20px 0;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+}
+
+#sidebar h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#sidebar ul li {
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+#sidebar ul li:hover {
+    transform: translateX(5px);
+}
+
+/* Main Content */
+#main-content {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Auth Container */
+/* Auth Container Styles */
+#auth-container {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+#auth-container .neumorphic {
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+#app-name {
+    color: var(--primary-color);
+    font-size: 3rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+#auth-title {
+    color: var(--secondary-color);
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Input fields in auth container */
+#auth-container input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 2px solid var(--primary-color);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+}
+
+#auth-container input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 10px rgba(65, 105, 225, 0.3);
+}
+
+/* Buttons in auth container */
+#auth-container button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+    background: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+#auth-container button:hover {
+    background: var(--secondary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Links in auth container */
+#auth-container a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+#auth-container a:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--card-bg);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+}
+
+#register-gamification-mode {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 10px;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    /* Ensure no CSS is hiding the element */
+    display: block !important;
+}
+
+#register-gamification-mode.hidden {
+    display: none !important;
+}
+
+#register-gamification-mode:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 10px rgba(65, 105, 225, 0.3);
+}
+
+#register-gamification-mode option {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+/* Additional styles for specific elements */
+#app-title {
+    color: var(--sidebar-text);
+    font-size: 28px;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.badge-buttons button {
+    font-size: 14px;
+    padding: 8px 16px;
+    margin: 5px;
+    background: var(--secondary-color);
+    color: var(--text-color);
+}
+
+.badge-buttons button:hover {
+    background: var(--accent-color);
+    color: var(--sidebar-text);
+    transform: rotate(5deg) scale(1.1);
+}
+
+#avatar {
+    border: 4px solid var(--sidebar-text);
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+#avatar:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.message-container {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.message-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+#lessons-list .neumorphic, #lessons-management-list .neumorphic {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#lessons-list img, #lessons-management-list img {
+    border-radius: 10px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+#lessons-list img:hover, #lessons-management-list img:hover {
+    transform: scale(1.05);
+}
+
+/* Form inputs */
+input[type="text"], input[type="email"], input[type="password"], select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 2px solid var(--primary-color);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
+}
+
+/* Lesson card styles */
+.lesson-card {
+    background: var(--card-bg);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.lesson-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.lesson-card-header {
+    padding: 1.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.lesson-card-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.lesson-card-content.expanded {
+    max-height: 1000px;
+    transition: max-height 0.5s ease-in;
+}
+
+.lesson-card-body {
+    padding: 0 1.5rem 1.5rem;
+}
+
+.lesson-card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.lesson-card-image:hover {
+    transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.float-animation {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pulse-animation {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Apply animations */
+.neumorphic {
+    animation: float 3s ease-in-out infinite;
+}
+
+.neumorphic-button, button {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Timer styles */
+#timer-display {
+    font-size: 48px;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-align: center;
+    margin: 20px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Mood emoji styles */
+.mood-emoji {
+    font-size: 24px;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mood-emoji:hover, .mood-emoji.selected {
+    transform: scale(1.2);
+}
+
+/* Post card styles */
+.post-card {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Leaderboard styles */
+#individual-leaderboard-list li, #team-leaderboard-list li {
+    background: var(--primary-color);
+    color: var(--sidebar-text);
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+#individual-leaderboard-list li:hover, #team-leaderboard-list li:hover {
+    transform: scale(1.05);
+    background: var(--secondary-color);
+}
+
+/* Theme selection styles */
+.theme-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.theme-button:hover {
+    transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #sidebar {
+        border-radius: 0 0 20px 20px;
+    }
+
+    .neumorphic, .neumorphic-button, button {
+        font-size: 14px;
+    }
+}
+/* Add any additional styles here */
+
+/* Default theme (based on the provided image) */
+.theme-default {
+    --bg-color: linear-gradient(135deg, #FFA500, #FFFFFF, #4169E1);
+    --text-color: #1a202c;
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --card-text: #1a202c;
+    --sidebar-bg: #4169E1;
+    --sidebar-text: #FFFFFF;
+}
+
+    .theme-dark {
+        --bg-color: #1a202c;
+        --text-color: #e2e8f0;
+        --card-bg: #2d3748;
+        --card-text: #e2e8f0;
+        --sidebar-bg: #2d3748;
+        --sidebar-text: #e2e8f0;
+    }
+
+    .theme-light {
+        --bg-color: #f7fafc;
+        --text-color: #1a202c;
+        --card-bg: #ffffff;
+        --card-text: #1a202c;
+        --sidebar-bg: #edf2f7;
+        --sidebar-text: #1a202c;
+    }
+
+    .theme-nature {
+        --bg-color: #f0fff4;
+        --text-color: #22543d;
+        --card-bg: #c6f6d5;
+        --card-text: #22543d;
+        --sidebar-bg: #9ae6b4;
+        --sidebar-text: #22543d;
+    }
+
+    /* New theme styles */
+    .theme-light-blue {
+        --bg-color: #e6f2ff;
+        --text-color: #1e3a8a;
+        --card-bg: #ffffff;
+        --card-text: #1e3a8a;
+        --sidebar-bg: #bfdbfe;
+        --sidebar-text: #1e3a8a;
+    }
+
+    .theme-light-orange {
+        --bg-color: #fff7ed;
+        --text-color: #9a3412;
+        --card-bg: #ffedd5;
+        --card-text: #9a3412;
+        --sidebar-bg: #fed7aa;
+        --sidebar-text: #9a3412;
+    }
+
+    .theme-yellow {
+        --bg-color: #fefce8;
+        --text-color: #854d0e;
+        --card-bg: #fef9c3;
+        --card-text: #854d0e;
+        --sidebar-bg: #fde047;
+        --sidebar-text: #854d0e;
+    }
+
+    .theme-colorful {
+        --bg-color: #f0f9ff;
+        --text-color: #1e40af;
+        --card-bg: linear-gradient(45deg, #fecaca, #bfdbfe, #bbf7d0);
+        --card-text: #1e40af;
+        --sidebar-bg: linear-gradient(to bottom, #f9a8d4, #93c5fd, #86efac);
+        --sidebar-text: #1e40af;
+    }
+
+    /* Rest of the existing CSS */
+    body {
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+#main-content {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+#sidebar {
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+}
+
+.neumorphic {
+    background: var(--card-bg);
+    color: var(--card-text);
+}
+
+.text-indigo-600, .text-gray-700 {
+    color: var(--text-color);
+}
+
+   /* Add these styles to your existing CSS */
+#timer-display {
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.pomodoro-type.active {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid var(--text-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+input[type="number"]:focus {
+    outline: none;
+    border-color: var(--text-color);
+    box-shadow: 0 0 0 2px rgba(var(--text-color-rgb), 0.2);
+}
+
+/* Ripple effect for buttons */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(65, 105, 225, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(65, 105, 225, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(65, 105, 225, 0);
+    }
+}
+
+.post-card {
+    animation: pulse 2s infinite;
+}
+    </style>
+
+    
+    <!-- Include Quill stylesheet -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+
+<div class="flex h-screen">
+    <div id="sidebar" class="neumorphic w-64 p-6 flex flex-col justify-between hidden">
+        <div>
+            <h2 id="app-title" class="text-2xl font-bold text-center mb-8 text-indigo-600">GamEng!</h2>
+            <div id="user-info" class="mb-6">
+                <p class="mb-2"><strong class="text-indigo-600">Name:</strong> <span id="user-name" class="text-gray-700"></span></p>
+                <p class="mb-2"><strong class="text-indigo-600">Role:</strong> <span id="user-role" class="text-gray-700"></span></p>
+                <p><strong class="text-indigo-600">Mode:</strong> <span id="gamification-text" class="text-gray-700"></span></p>
+            </div>
+            <div id="sidebar-content" class="space-y-4"></div>
+        </div>
+        <button onclick="logout()" class="neumorphic-button py-2 px-4 text-indigo-600 font-semibold hover:text-indigo-700">Logout</button>
+    </div>
+
+    <div id="main-content" class="flex-1 p-8 overflow-y-auto hidden">
+        <div id="lesson-content">
+            <!-- Competence Mode -->
+            <div id="competence-mode" class="hidden space-y-8">
+                <h3 class="text-2xl font-semibold text-center text-indigo-600 mb-6">Competence Mode</h3>
+
+                <!-- Individual Leaderboard -->
+                <div id="individual-leaderboard" class="neumorphic p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-indigo-600">Individual Leaderboard</h3>
+                    <ul id="individual-leaderboard-list" class="space-y-2"></ul>
+                </div>
+
+                <!-- Award Points and Badges to Students (Visible to Teachers Only) -->
+                <div id="points-award" class="hidden space-y-6">
+                    <div class="neumorphic p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-indigo-600">Award Points to Students</h3>
+                        <select id="student-list" class="neumorphic-inset w-full p-2 mb-4"></select>
+                        <div class="point-buttons grid grid-cols-2 gap-4">
+                            <button onclick="adjustPoints(10)" class="neumorphic-button py-2 px-4 text-green-600 font-semibold">+10xp</button>
+                            <button onclick="adjustPoints(20)" class="neumorphic-button py-2 px-4 text-green-600 font-semibold">+20xp</button>
+                            <button onclick="adjustPoints(50)" class="neumorphic-button py-2 px-4 text-green-600 font-semibold">+50xp</button>
+                            <button onclick="adjustPoints(100)" class="neumorphic-button py-2 px-4 text-green-600 font-semibold">+100xp</button>
+                            <button onclick="adjustPoints(-10)" class="neumorphic-button py-2 px-4 text-red-600 font-semibold">-10xp</button>
+                            <button onclick="adjustPoints(-20)" class="neumorphic-button py-2 px-4 text-red-600 font-semibold">-20xp</button>
+                            <button onclick="adjustPoints(-50)" class="neumorphic-button py-2 px-4 text-red-600 font-semibold">-50xp</button>
+                            <button onclick="adjustPoints(-100)" class="neumorphic-button py-2 px-4 text-red-600 font-semibold">-100xp</button>
+                        </div>
+                    </div>
+
+                    <div class="neumorphic p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-indigo-600">Award Badges to Students</h3>
+                        <div class="badge-buttons grid grid-cols-2 gap-4">
+                            <button onclick="awardBadge('first to answer')" class="neumorphic-button py-2 px-4 text-indigo-600 font-semibold">First to Answer</button>
+                            <button onclick="awardBadge('first to finish')" class="neumorphic-button py-2 px-4 text-indigo-600 font-semibold">First to Finish</button>
+                            <button onclick="awardBadge('Hardworking')" class="neumorphic-button py-2 px-4 text-indigo-600 font-semibold">Hardworking</button>
+                            <button onclick="awardBadge('Team Player')" class="neumorphic-button py-2 px-4 text-indigo-600 font-semibold">Team Player</button>
+                            <button onclick="awardBadge('Creative Thinker')" class="neumorphic-button py-2 px-4 text-indigo-600 font-semibold">Creative Thinker</button>
+                            <button onclick="awardBadge('Problem Solver')" class="neumorphic-button py-2 px-4 text-indigo-600 font-semibold">Problem Solver</button>
+                            <button onclick="awardBadge('Critical Thinker')" class="neumorphic-button py-2 px-4 text-indigo-600 font-semibold">Critical Thinker</button>
+                            <button onclick="awardBadge('Persistent')" class="neumorphic-button py-2 px-4 text-indigo-600 font-semibold">Persistent</button>
+                            <button onclick="awardBadge('Quick Learner')" class="neumorphic-button py-2 px-4 text-indigo-600 font-semibold">Quick Learner</button>
+                            <button onclick="awardBadge('Leader')" class="neumorphic-button py-2 px-4 text-indigo-600 font-semibold">Leader</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Progress Bar (Visible to Students Only) -->
+                <div id="student-progress" class="hidden space-y-6">
+                    <div class="neumorphic p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-indigo-600">Your Progress</h3>
+                        <div class="mb-4">
+                            <span id="current-level" class="text-indigo-600 font-semibold"></span>
+                            <div class="progress-bar h-4 mt-2">
+                                <div id="progress" class="progress h-full"></div>
+                            </div>
+                            <span id="next-level" class="text-indigo-600 font-semibold"></span>
+                        </div>
+                        <div class="badge-container">
+                            <h4 class="text-lg font-semibold mb-2 text-indigo-600">Your Badges</h4>
+                            <div id="earned-badges" class="flex flex-wrap gap-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Autonomy Mode -->
+            <div id="autonomy-mode" class="hidden space-y-8">
+                <h3 class="text-2xl font-semibold text-center text-indigo-600 mb-6">Autonomy Mode</h3>
+                <div id="avatar-customization" class="neumorphic p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-indigo-600">Customize Your Avatar</h3>
+                    <img id="avatar-preview" src="https://avataaars.io/?avatarStyle=Circle" alt="Avatar" class="w-32 h-32 rounded-full mx-auto mb-4" />
+                    <button onclick="randomizeAvatar()" class="neumorphic-button w-full py-2 px-4 text-indigo-600 font-semibold mb-4">Randomize Avatar</button>
+                    <button onclick="saveAvatar()" class="neumorphic-button w-full py-2 px-4 text-indigo-600 font-semibold">Save Avatar</button>
+                </div>
+            </div>
+
+            <div id="theme-selection" class="hidden space-y-6">
+                <div class="neumorphic p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-indigo-600">Theme Selection</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <button onclick="changeTheme('default')" class="theme-button neumorphic-button py-2 px-4 text-indigo-600 font-semibold">Default</button>
+                        <button onclick="changeTheme('dark')" class="theme-button neumorphic-button py-2 px-4 text-gray-200 font-semibold bg-gray-800">Dark</button>
+                        <button onclick="changeTheme('light')" class="theme-button neumorphic-button py-2 px-4 text-gray-800 font-semibold bg-gray-100">Light</button>
+                        <button onclick="changeTheme('nature')" class="theme-button neumorphic-button py-2 px-4 text-green-800 font-semibold bg-green-200">Nature</button>
+                        <button onclick="changeTheme('light-blue')" class="theme-button neumorphic-button py-2 px-4 text-blue-800 font-semibold bg-blue-200">Light Blue</button>
+                        <button onclick="changeTheme('light-orange')" class="theme-button neumorphic-button py-2 px-4 text-orange-800 font-semibold bg-orange-200">Light Orange</button>
+                        <button onclick="changeTheme('yellow')" class="theme-button neumorphic-button py-2 px-4 text-yellow-800 font-semibold bg-yellow-200">Yellow</button>
+                        <button onclick="changeTheme('colorful')" class="theme-button neumorphic-button py-2 px-4 text-purple-800 font-semibold bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300">Colorful</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="pomodoro-timer" class="hidden space-y-6">
+                <div class="neumorphic p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-indigo-600">Pomodoro Timer</h3>
+                    <div id="timer-display" class="text-4xl font-bold text-center mb-4">25:00</div>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <button id="start-timer" class="neumorphic-button py-2 px-4 text-green-600 font-semibold">Start</button>
+                        <button id="reset-timer" class="neumorphic-button py-2 px-4 text-red-600 font-semibold">Reset</button>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <input type="number" id="pomodoro-time" class="neumorphic-inset w-full p-2 mb-2" value="25" min="1" max="60">
+                            <button class="pomodoro-type neumorphic-button w-full py-2 px-4 text-indigo-600 font-semibold" data-type="pomodoro">Pomodoro</button>
+                        </div>
+                        <div>
+                            <input type="number" id="short-break-time" class="neumorphic-inset w-full p-2 mb-2" value="15" min="1" max="30">
+                            <button class="pomodoro-type neumorphic-button w-full py-2 px-4 text-indigo-600 font-semibold" data-type="shortBreak">Short Break</button>
+                        </div>
+                        <div>
+                            <input type="number" id="long-break-time" class="neumorphic-inset w-full p-2 mb-2" value="15" min="1" max="60">
+                            <button class="pomodoro-type neumorphic-button w-full py-2 px-4 text-indigo-600 font-semibold" data-type="longBreak">Long Break</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Add this inside the autonomy-mode div -->
+<div id="microblog-section" class="hidden space-y-6">
+    <div class="neumorphic p-6">
+        <h3 class="text-xl font-semibold mb-4 text-indigo-600">Microblog</h3>
+        <div id="post-form" class="mb-4">
+            <textarea id="post-content" class="neumorphic-inset w-full p-2 mb-2" rows="3" placeholder="Share your thoughts..."></textarea>
+            <div class="flex justify-between items-center">
+                <div id="mood-selector" class="space-x-2">
+                    <button class="mood-emoji" data-mood="happy">😊</button>
+                    <button class="mood-emoji" data-mood="sad">😢</button>
+                    <button class="mood-emoji" data-mood="excited">😃</button>
+                    <button class="mood-emoji" data-mood="tired">😴</button>
+                    <button class="mood-emoji" data-mood="neutral">😐</button>
+                </div>
+                <button id="submit-post" class="neumorphic-button py-2 px-4 text-indigo-600 font-semibold">Post</button>
+            </div>
+        </div>
+        <div id="posts-container" class="space-y-4"></div>
+    </div>
+</div>
+
+<!-- Add this inside the teacher's view (you can place it where appropriate) -->
+<div id="teacher-microblog-view" class="hidden space-y-6">
+    <div class="neumorphic p-6">
+        <h3 class="text-xl font-semibold mb-4 text-indigo-600">Student Microblogs</h3>
+        <select id="student-microblog-select" class="neumorphic-inset w-full p-2 mb-4"></select>
+        <div id="teacher-posts-container" class="space-y-4"></div>
+    </div>
+</div>
+            
+            <!-- Add this to your existing HTML for the audio alert -->
+            <audio id="timer-audio" src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3"></audio>
+            <!-- Relatedness Mode -->
+            <div id="relatedness-mode" class="hidden space-y-8">
+                <h3 class="text-2xl font-semibold text-center text-indigo-600 mb-6">Relatedness Mode</h3>
+
+                <!-- Team Leaderboard -->
+                <div id="team-leaderboard" class="neumorphic p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-indigo-600">Team Leaderboard</h3>
+                    <ul id="team-leaderboard-list" class="space-y-2"></ul>
+                </div>
+
+                <!-- Team Management (Visible to Teachers Only) -->
+                <div id="team-management" class="hidden space-y-6">
+                    <div class="neumorphic p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-indigo-600">Team Management</h3>
+                        <select id="student-group-list" class="neumorphic-inset w-full p-2 mb-4"></select>
+                        <input type="text" id="team-name" placeholder="Enter Team Name" class="neumorphic-inset w-full p-2 mb-4" />
+                        <button onclick="assignTeam()" class="neumorphic-button w-full py-2 px-4 text-indigo-600 font-semibold">Assign to Team</button>
+                    </div>
+                    <div id="teams-list" class="neumorphic p-6"></div>
+
+                    <div class="neumorphic p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-indigo-600">Award Points to Teams</h3>
+                        <select id="team-select" class="neumorphic-inset w-full p-2 mb-4"></select>
+                        <div class="point-buttons grid grid-cols-2 gap-4">
+                            <button onclick="awardTeamPoints(10)" class="neumorphic-button py-2 px-4 text-green-600 font-semibold">+10xp</button>
+                            <button onclick="awardTeamPoints(20)" class="neumorphic-button py-2 px-4 text-green-600 font-semibold">+20xp</button>
+                            <button onclick="awardTeamPoints(50)" class="neumorphic-button py-2 px-4 text-green-600 font-semibold">+50xp</button>
+                            <button onclick="awardTeamPoints(100)" class="neumorphic-button py-2 px-4 text-green-600 font-semibold">+100xp</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Team Information (Visible to Students Only) -->
+                <div id="student-team-info" class="hidden space-y-6">
+                    <div class="neumorphic p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-indigo-600">Your Team: <span id="student-team-name" class="text-indigo-800"></span></h3>
+                        <ul id="student-team-members" class="list-disc list-inside space-y-2"></ul>
+                    </div>
+
+                    <div class="neumorphic p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-indigo-600">Team Messages</h3>
+                        <div id="student-messages-list" class="space-y-4 mb-4"></div>
+                        <input type="text" id="team-message-input" placeholder="Enter your message" class="neumorphic-inset w-full p-2 mb-4" />
+                        <button onclick="sendMessage()" class="neumorphic-button w-full py-2 px-4 text-indigo-600 font-semibold">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Lessons Section -->
+        <div id="lessons-section" class="hidden space-y-8">
+            <h3 class="text-2xl font-semibold text-center text-indigo-600 mb-6">Lessons</h3>
+            <div id="lessons-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+        <!-- New Lesson Management Section (Visible to Teachers Only) -->
+        <div id="lesson-management" class="hidden space-y-8">
+            <h3 class="text-2xl font-semibold text-center text-indigo-600 mb-6">Lesson Management</h3>
+            <button onclick="showAddLessonForm()" class="neumorphic-button py-2 px-4 text-indigo-600 font-semibold">Add New Lesson</button>
+            <div id="add-lesson-form" class="hidden space-y-4">
+                <input type="text" id="lesson-title" placeholder="Lesson Title (required)" class="neumorphic-inset w-full p-2" required>
+                <input type="text" id="lesson-task" placeholder="Lesson Task (optional)" class="neumorphic-inset w-full p-2">
+                <div id="lesson-editor" class="neumorphic-inset w-full p-2 h-32"></div>
+                <input type="file" id="lesson-image" accept="image/*" class="neumorphic-inset w-full p-2">
+                <div id="lesson-image-preview-container" class="hidden mt-2">
+                    <img id="lesson-image-preview" class="max-w-full h-auto" alt="Image preview" />
+                </div>
+                <input type="file" id="lesson-pdf" accept=".pdf" class="neumorphic-inset w-full p-2">
+                <span id="lesson-pdf-label" class="text-sm text-gray-600"></span>
+                <input type="text" id="lesson-link" placeholder="External Link" class="neumorphic-inset w-full p-2">
+                <button onclick="saveLesson()" class="neumorphic-button py-2 px-4 text-indigo-600 font-semibold">Save Lesson</button>
+            </div>
+            <div id="lessons-management-list" class="space-y-4"></div>
+        </div>
+    </div>
+</div>
+
+<div id="auth-container" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+    <div class="neumorphic p-8 w-full max-w-md">
+        <h1 id="app-name" class="text-4xl font-bold mb-6 text-center text-primary-color">GamEng!</h1>
+        <h2 id="auth-title" class="text-2xl font-bold mb-6 text-center text-indigo-600">Login</h2>
+        <div id="login-form">
+            <input type="email" id="login-email" placeholder="Email" required class="neumorphic-inset w-full p-3 mb-4" />
+            <input type="password" id="login-password" placeholder="Password" required class="neumorphic-inset w-full p-3 mb-4" />
+            <button onclick="login()" class="neumorphic-button w-full py-3 px-4 text-indigo-600 font-semibold mb-4">Login</button>
+            <p class="text-center text-gray-600">Don't have an account? <a href="#" onclick="showRegister()" class="text-indigo-600 font-semibold">Register</a></p>
+        </div>
+
+        <div id="register-form" class="hidden">
+            <input type="text" id="register-school-code" placeholder="School Code" required class="neumorphic-inset w-full p-3 mb-4" />
+            <input type="text" id="register-fullname" placeholder="Full Name" required class="neumorphic-inset w-full p-3 mb-4" />
+            <input type="email" id="register-email" placeholder="Email" required class="neumorphic-inset w-full p-3 mb-4" />
+            <input type="password" id="register-password" placeholder="Password" required class="neumorphic-inset w-full p-3 mb-4" />
+            <select id="register-role" class="neumorphic-inset w-full p-3 mb-4" onchange="toggleGamificationMode()">
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+            </select>
+            <select id="register-gamification-mode" class="neumorphic-inset w-full p-3 mb-4 hidden">
+                <option value="">Select Gamification Mode</option>
+                <option value="competence">Competence</option>
+                <option value="autonomy">Autonomy</option>
+                <option value="relatedness">Relatedness</option>
+            </select>
+            
+            <button onclick="register()" class="neumorphic-button w-full py-3 px-4 text-indigo-600 font-semibold mb-4">Register</button>
+            <p class="text-center text-gray-600">Already have an account? <a href="#" onclick="showLogin()" class="text-indigo-600 font-semibold">Login</a></p>
+        </div>
+
+<!-- Lesson Modal -->
+<div id="lesson-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center hidden">
+    <div class="bg-white w-full h-full max-w-5xl mx-auto p-8 rounded-lg shadow-lg relative overflow-auto">
+        <button onclick="closeLessonModal()" class="absolute top-4 right-4 text-gray-600 text-2xl font-bold">&times;</button>
+        <h2 id="modal-lesson-title" class="text-2xl font-semibold mb-4 text-indigo-600"></h2>
+        <div id="modal-lesson-task" class="text-lg mb-4"></div>
+        <div id="modal-lesson-content" class="mb-4"></div>
+        <div class="flex justify-center mb-4">
+            <img id="modal-lesson-image" class="max-w-full h-auto rounded-lg" alt="Lesson Image" />
+        </div>
+        <a id="modal-lesson-pdf" href="#" target="_blank" class="block mb-2 text-blue-600 hover:underline">Download PDF</a>
+        <a id="modal-lesson-link" href="#" target="_blank" class="block text-blue-600 hover:underline">Visit Link</a>
+    </div>
+</div>
+
+<!-- Include Quill library -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script type="module">
+   // Firebase configuration and initialization
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-auth.js";
+import { getDatabase, ref, set, get, update, push, remove, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-storage.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCYMlv_m2BcTrhm60hLroWVs0W_9SHSVfQ",
+    authDomain: "gamification-app-856a4.firebaseapp.com",
+    databaseURL: "https://gamification-app-856a4-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "gamification-app-856a4",
+    storageBucket: "gamification-app-856a4.appspot.com",
+    messagingSenderId: "966888657590",
+    appId: "1:966888657590:web:98f5990d1c933f8cbc0c17",
+    measurementId: "G-QVK4E2GD51"
+};
+
+// Make sure these are defined at the top of your script
+let auth;
+let db;
+
+// Initialize Firebase
+console.log("Initializing Firebase...");
+const app = initializeApp(firebaseConfig);
+console.log("Firebase initialized:", app);
+auth = getAuth(app);
+console.log("Auth object created:", auth);
+db = getDatabase(app);
+
+// Updated login function with more logging
+window.login = async function () {
+    console.log("Login function called");
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    console.log("Email:", email, "Password:", password);
+
+    if (!auth) {
+        console.error("Auth object is not initialized");
+        alert("Authentication system is not ready. Please try again later.");
+        return;
+    }
+
+    try {
+        console.log("Attempting to sign in...");
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        console.log("Login successful", userCredential.user);
+        loadDashboard(userCredential.user);
+    } catch (error) {
+        console.error('Login failed:', error);
+        console.error('Error code:', error.code);
+        console.error('Error message:', error.message);
+        alert('Login failed: ' + error.message);
+    }
+}
+
+// Show login form
+window.showLogin = function () {
+    document.getElementById('login-form').style.display = 'block';
+    document.getElementById('register-form').style.display = 'none';
+    document.getElementById('auth-title').textContent = 'Login';
+}
+
+// Show register form
+window.showRegister = function () {
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('register-form').style.display = 'block';
+    document.getElementById('auth-title').textContent = 'Register';
+}
+
+    // Add this function to your JavaScript
+function toggleGamificationMode() {
+    const roleSelect = document.getElementById('register-role');
+    const gamificationModeSelect = document.getElementById('register-gamification-mode');
+    
+    if (roleSelect.value === 'teacher') {
+        gamificationModeSelect.style.display = 'block';
+    } else {
+        gamificationModeSelect.style.display = 'none';
+        gamificationModeSelect.value = ''; // Reset the selection
+    }
+}
+
+// Add this event listener after your DOM is loaded
+document.getElementById('register-role').addEventListener('change', toggleGamificationMode);
+
+// Call this once to set the initial state
+toggleGamificationMode();
+
+// Load dashboard (for both teachers and students)
+async function loadDashboard(user) {
+    try {
+        const userRef = ref(db, 'users/' + user.uid);
+        const userSnapshot = await get(userRef);
+        if (userSnapshot.exists()) {
+            const userData = userSnapshot.val();
+
+            document.getElementById('auth-container').style.display = 'none';
+            document.getElementById('sidebar').style.display = 'flex';
+            document.getElementById('main-content').style.display = 'block';
+
+            document.getElementById('user-name').textContent = userData.fullName;
+            document.getElementById('user-role').textContent = userData.role;
+
+            // Fetch the gamification mode for the user's school
+            const schoolRef = ref(db, 'schools/' + userData.schoolCode);
+            const schoolSnapshot = await get(schoolRef);
+
+            if (schoolSnapshot.exists()) {
+                const schoolData = schoolSnapshot.val();
+                const gamificationMode = schoolData.gamificationMode;
+                displayGamificationMode(gamificationMode, userData.role, userData.schoolCode);
+
+                // Adjust sidebar content based on gamification mode and role
+                updateSidebarContent(userData.role, gamificationMode);
+
+                // Hide all mode-specific sections first
+                document.getElementById('competence-mode').style.display = 'none';
+                document.getElementById('autonomy-mode').style.display = 'none';
+                document.getElementById('relatedness-mode').style.display = 'none';
+                document.getElementById('teacher-microblog-view').style.display = 'none';
+
+                if (userData.role === "teacher") {
+                    if (gamificationMode === 'competence') {
+                        document.getElementById('competence-mode').style.display = 'block';
+                        document.getElementById('points-award').style.display = 'block';
+                        document.getElementById('student-progress').style.display = 'none';
+                        loadStudents(userData.schoolCode, false);
+                    } else if (gamificationMode === 'relatedness') {
+                        document.getElementById('relatedness-mode').style.display = 'block';
+                        document.getElementById('team-management').style.display = 'block';
+                        loadStudentsForGroupAssignment(userData.schoolCode);
+                        loadTeams(userData.schoolCode);
+                        setupTeamLeaderboardListener(userData.schoolCode);
+                    } else if (gamificationMode === 'autonomy') {
+                        document.getElementById('autonomy-mode').style.display = 'block';
+                        document.getElementById('teacher-microblog-view').style.display = 'block';
+                        loadStudentsForMicroblog(userData.schoolCode);
+                    }
+                } else if (userData.role === "student") {
+                    if (gamificationMode === 'competence') {
+                        document.getElementById('competence-mode').style.display = 'block';
+                        loadIndividualLeaderboard(userData.schoolCode);
+                        loadStudentProgress(user.uid);
+                    } else if (gamificationMode === 'relatedness') {
+                        document.getElementById('relatedness-mode').style.display = 'block';
+                        loadStudentTeam(user.uid);
+                        setupTeamLeaderboardListener(userData.schoolCode);
+                    } else if (gamificationMode === 'autonomy') {
+                        document.getElementById('autonomy-mode').style.display = 'block';
+                        initAutonomyMode(user.uid);
+                    }
+                }
+                
+                // Apply theme if it exists (for autonomy mode)
+                if (userData.theme) {
+                    applyTheme(userData.theme);
+                }
+            } else {
+                console.log("No school data found for this user.");
+            }
+        } else {
+            alert('No data available');
+        }
+    } catch (error) {
+        console.error('Failed to load dashboard:', error);
+    }
+}
+
+// Update the sidebar content based on role and gamification mode
+// Update the sidebar content based on role and gamification mode
+function updateSidebarContent(role, mode) {
+    const sidebarContent = document.getElementById('sidebar-content');
+    sidebarContent.innerHTML = '';
+
+    const commonItems = `
+        <li class="text-gray-700 hover:text-indigo-600 cursor-pointer" onclick="showDashboard()">Dashboard</li>
+        <li class="text-gray-700 hover:text-indigo-600 cursor-pointer" onclick="showLessons()">Lessons</li>
+    `;
+
+    let modeSpecificItems = '';
+    let teacherActions = '';
+
+    if (mode === 'competence') {
+        modeSpecificItems = `
+            <li class="text-gray-700 hover:text-indigo-600 cursor-pointer" onclick="showLeaderboard()">Leaderboard</li>
+        `;
+        if (role === 'teacher') {
+            teacherActions = `
+                <li class="text-gray-700 hover:text-indigo-600 cursor-pointer" onclick="showPointsAward()">Award Points</li>
+            `;
+        } else {
+            modeSpecificItems += `
+                <li class="text-gray-700 hover:text-indigo-600 cursor-pointer" onclick="showProgress()">My Progress</li>
+            `;
+        }
+    } else if (mode === 'autonomy') {
+        modeSpecificItems = `
+            <li class="text-gray-700 hover:text-indigo-600 cursor-pointer" onclick="showThemeSelection()">Theme Selection</li>
+            <li class="text-gray-700 hover:text-indigo-600 cursor-pointer" onclick="showPomodoroTimer()">Pomodoro Timer</li>
+        `;
+        if (role === 'teacher') {
+            teacherActions = `
+                <li class="text-gray-700 hover:text-indigo-600 cursor-pointer" onclick="showStudentMicroblogs()">Student Microblogs</li>
+            `;
+        } else {
+            modeSpecificItems += `
+                <li class="text-gray-700 hover:text-indigo-600 cursor-pointer" onclick="showMicroblog()">My Microblog</li>
+            `;
+        }
+    } else if (mode === 'relatedness') {
+        modeSpecificItems = `
+            <li class="text-gray-700 hover:text-indigo-600 cursor-pointer" onclick="showTeamLeaderboard()">Team Leaderboard</li>
+        `;
+        if (role === 'teacher') {
+            teacherActions = `
+                <li class="text-gray-700 hover:text-indigo-600 cursor-pointer" onclick="showTeamManagement()">Manage Teams</li>
+            `;
+        } else {
+            modeSpecificItems += `
+                <li class="text-gray-700 hover:text-indigo-600 cursor-pointer" onclick="showTeamInfo()">My Team</li>
+            `;
+        }
+    }
+
+    sidebarContent.innerHTML = `
+        <h3 class="text-lg font-semibold mb-2 text-indigo-600">${mode.charAt(0).toUpperCase() + mode.slice(1)} Mode</h3>
+        <ul class="space-y-2">
+            ${commonItems}
+            ${modeSpecificItems}
+        </ul>
+    `;
+
+    if (role === 'teacher') {
+        sidebarContent.innerHTML += `
+            <div class="mt-6">
+                <h4 class="text-lg font-semibold mb-2 text-indigo-600">Teacher Actions</h4>
+                <ul class="space-y-2">
+                    <li class="text-gray-700 hover:text-indigo-600 cursor-pointer" onclick="showLessonManagement()">Manage Lessons</li>
+                    ${teacherActions}
+                </ul>
+            </div>
+        `;
+    }
+}
+// Display gamification mode
+function displayGamificationMode(mode, role, schoolCode) {
+    document.getElementById('gamification-text').textContent = mode.charAt(0).toUpperCase() + mode.slice(1);
+
+    document.getElementById('competence-mode').style.display = mode === 'competence' ? 'block' : 'none';
+    document.getElementById('autonomy-mode').style.display = mode === 'autonomy' ? 'block' : 'none';
+    document.getElementById('relatedness-mode').style.display = mode === 'relatedness' ? 'block' : 'none';
+
+    if (mode === 'autonomy') {
+        loadAvatar(); // Load the avatar if in autonomy mode
+    }
+
+    if (role === 'student') {
+        // Hide the ability to award points and assign teams from students
+        document.getElementById('points-award').style.display = 'none';
+        document.getElementById('team-management').style.display = 'none';
+
+        if (mode === 'competence') {
+            loadIndividualLeaderboard(schoolCode);
+        } else if (mode === 'relatedness') {
+            setupTeamLeaderboardListener(schoolCode);
+        }
+    }
+}
+
+// Load avatar
+async function loadAvatar() {
+    const user = auth.currentUser;
+
+    if (user) {
+        const userSnapshot = await get(ref(db, 'users/' + user.uid));
+        if (userSnapshot.exists()) {
+            const userData = userSnapshot.val();
+            const avatarUrl = userData.avatarUrl || 'https://avataaars.io/?avatarStyle=Circle';
+            document.getElementById('avatar-preview').src = avatarUrl;
+        }
+    }
+}
+
+// Randomize avatar and preview
+window.randomizeAvatar = function () {
+    const avatarParams = {
+        topType: getRandomTopType(),
+        accessoriesType: getRandomAccessoriesType(),
+        hairColor: getRandomHairColor(),
+        facialHairType: getRandomFacialHairType(),
+        facialHairColor: getRandomFacialHairColor(),
+        clotheType: getRandomClotheType(),
+        clotheColor: getRandomClotheColor(),
+        eyeType: getRandomEyeType(),
+        eyebrowType: getRandomEyebrowType(),
+        mouthType: getRandomMouthType(),
+        skinColor: getRandomSkinColor(),
+    };
+
+    const avatarUrl = `https://avataaars.io/?${new URLSearchParams(avatarParams)}`;
+    document.getElementById('avatar-preview').src = avatarUrl;
+}
+
+// Save avatar
+window.saveAvatar = async function () {
+    const avatarUrl = document.getElementById('avatar-preview').src;
+    const user = auth.currentUser;
+
+    if (user) {
+        try {
+            await update(ref(db, 'users/' + user.uid), { avatarUrl: avatarUrl });
+            alert('Avatar saved successfully!');
+        } catch (error) {
+            alert('Failed to save avatar: ' + error.message);
+        }
+    }
+}
+
+// Helper functions for randomizing avatar components
+function getRandomTopType() {
+    const topTypes = [
+        'NoHair', 'Eyepatch', 'Hat', 'Hijab', 'Turban', 'WinterHat1', 'LongHairStraight',
+        'LongHairCurvy', 'ShortHairShortCurly', 'ShortHairShaggyMullet'
+    ];
+    return topTypes[Math.floor(Math.random() * topTypes.length)];
+}
+
+function getRandomAccessoriesType() {
+    const accessoriesTypes = ['Blank', 'Kurt', 'Prescription02', 'Round'];
+    return accessoriesTypes[Math.floor(Math.random() * accessoriesTypes.length)];
+}
+
+function getRandomHairColor() {
+    const hairColors = ['Auburn', 'Black', 'Blonde', 'BrownDark', 'Red', 'SilverGray'];
+    return hairColors[Math.floor(Math.random() * hairColors.length)];
+}
+
+function getRandomFacialHairType() {
+    const facialHairTypes = ['Blank', 'BeardLight', 'MoustacheFancy'];
+    return facialHairTypes[Math.floor(Math.random() * facialHairTypes.length)];
+}
+
+function getRandomFacialHairColor() {
+    const facialHairColors = ['Black', 'BrownDark', 'Red'];
+    return facialHairColors[Math.floor(Math.random() * facialHairColors.length)];
+}
+
+function getRandomClotheType() {
+    const clotheTypes = ['BlazerShirt', 'BlazerSweater', 'Hoodie', 'Overall'];
+    return clotheTypes[Math.floor(Math.random() * clotheTypes.length)];
+}
+
+function getRandomClotheColor() {
+    const clotheColors = ['PastelBlue', 'PastelGreen', 'PastelOrange', 'PastelRed'];
+    return clotheColors[Math.floor(Math.random() * clotheColors.length)];
+}
+
+function getRandomEyeType() {
+    const eyeTypes = ['Close', 'Cry', 'Happy', 'Hearts'];
+    return eyeTypes[Math.floor(Math.random() * eyeTypes.length)];
+}
+
+function getRandomEyebrowType() {
+    const eyebrowTypes = ['Angry', 'Default', 'FlatNatural', 'RaisedExcited'];
+    return eyebrowTypes[Math.floor(Math.random() * eyebrowTypes.length)];
+}
+
+function getRandomMouthType() {
+    const mouthTypes = ['Smile', 'Disbelief', 'Serious', 'ScreamOpen'];
+    return mouthTypes[Math.floor(Math.random() * mouthTypes.length)];
+}
+
+function getRandomSkinColor() {
+    const skinColors = ['Light', 'Brown', 'Black', 'Pale'];
+    return skinColors[Math.floor(Math.random() * skinColors.length)];
+}
+
+// Load individual leaderboard for students in competence mode in real-time
+async function loadIndividualLeaderboard(schoolCode) {
+    try {
+        const leaderboardRef = ref(db, `schools/${schoolCode}/leaderboard`);
+        
+        // Listen for changes to the leaderboard data
+        onValue(leaderboardRef, (snapshot) => {
+            const leaderboardList = document.getElementById('individual-leaderboard-list');
+            leaderboardList.innerHTML = '';
+
+            // Create an array to store students for sorting
+            let students = [];
+
+            snapshot.forEach((childSnapshot) => {
+                const student = childSnapshot.val();
+                students.push({ name: student.name, points: student.points });
+            });
+
+            // Sort the students by points in descending order
+            students.sort((a, b) => b.points - a.points);
+
+            // Render the sorted students in the leaderboard
+            students.forEach((student) => {
+                const li = document.createElement('li');
+                li.textContent = `${student.name} - ${student.points} points`;
+                li.className = 'py-2 border-b border-gray-200 last:border-b-0';
+                leaderboardList.appendChild(li);
+            });
+        }, (error) => {
+            console.error('Failed to load individual leaderboard in real-time:', error);
+        });
+    } catch (error) {
+        console.error('Failed to load individual leaderboard:', error);
+    }
+}
+
+// Load team leaderboard for relatedness mode in real-time
+function setupTeamLeaderboardListener(schoolCode) {
+    const teamsRef = ref(db, `schools/${schoolCode}/teams`);
+    
+    // Listen for changes to the teams data
+    onValue(teamsRef, (snapshot) => {
+        const leaderboardList = document.getElementById('team-leaderboard-list');
+        leaderboardList.innerHTML = ''; // Clear the list first
+
+        // Create an array to store teams for sorting
+        let teams = [];
+
+        snapshot.forEach((childSnapshot) => {
+            const team = childSnapshot.val();
+            teams.push({ name: childSnapshot.key, points: team.points || 0 });
+        });
+
+        // Sort the teams by points in descending order
+        teams.sort((a, b) => b.points - a.points);
+
+        // Render the sorted teams in the leaderboard
+        teams.forEach((team) => {
+            const li = document.createElement('li');
+            li.textContent = `${team.name} - ${team.points} points`;
+            li.className = 'py-2 border-b border-gray-200 last:border-b-0';
+            leaderboardList.appendChild(li);
+        });
+    }, (error) => {
+        console.error('Failed to load team leaderboard in real-time:', error);
+    });
+}
+
+// Load student progress for competence mode in real-time
+async function loadStudentProgress(uid) {
+    try {
+        const studentRef = ref(db, `users/${uid}`);
+        
+        // Listen for changes to the student's points
+        onValue(studentRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const studentData = snapshot.val();
+                const currentPoints = studentData.points || 0;
+                const currentLevel = Math.floor(currentPoints / 1000) + 1;
+                const nextLevel = currentLevel + 1;
+                const progress = (currentPoints % 1000) / 10;
+
+                document.getElementById('current-level').textContent = `Level: ${currentLevel}`;
+                document.getElementById('progress').style.width = `${progress}%`;
+                document.getElementById('next-level').textContent = `Next Level: ${nextLevel}`;
+
+                // Update badges in real-time
+                loadEarnedBadges(uid);
+                document.getElementById('student-progress').style.display = 'block';
+            }
+        }, (error) => {
+            console.error('Failed to load student progress in real-time:', error);
+        });
+    } catch (error) {
+        console.error('Failed to load student progress:', error);
+    }
+}
+
+// Load earned badges for a student in real-time
+async function loadEarnedBadges(uid) {
+    try {
+        const badgesRef = ref(db, `users/${uid}/badges`);
+        
+        // Listen for changes to the student's badges
+        onValue(badgesRef, (snapshot) => {
+            const badgesContainer = document.getElementById('earned-badges');
+            badgesContainer.innerHTML = '';
+
+            // Create badge elements only for earned badges
+            snapshot.forEach((childSnapshot) => {
+                const badgeName = childSnapshot.val();
+                const badge = document.createElement('div');
+                badge.className = 'neumorphic p-2 rounded-full';
+                const img = document.createElement('img');
+                img.src = `images/badges/${badgeName.toLowerCase().replace(/ /g, '-')}.png`;
+                img.alt = badgeName;
+                img.className = 'w-12 h-12';
+
+                // Set default image if badge image fails to load
+                img.onerror = () => {
+                    img.src = 'images/badges/default-badge.png';
+                };
+
+                badge.appendChild(img);
+                badge.title = badgeName; // Add tooltip with badge name
+                badgesContainer.appendChild(badge);
+            });
+
+            // If no badges earned, display a message
+            if (badgesContainer.children.length === 0) {
+                const noBadgesMsg = document.createElement('p');
+                noBadgesMsg.textContent = 'No badges earned yet.';
+                noBadgesMsg.className = 'text-gray-500 italic';
+                badgesContainer.appendChild(noBadgesMsg);
+            }
+        }, (error) => {
+            console.error('Failed to load earned badges in real-time:', error);
+        });
+    } catch (error) {
+        console.error('Failed to load earned badges:', error);
+    }
+}
+
+// Load students list for the teacher
+async function loadStudents(schoolCode, showAvatars = false) {
+    try {
+        const usersRef = ref(db, 'users');
+        const snapshot = await get(usersRef);
+        const studentList = document.getElementById('student-list');
+        studentList.innerHTML = ''; // Clear the list first
+
+        let studentsFound = false;
+
+        snapshot.forEach((childSnapshot) => {
+            const userData = childSnapshot.val();
+            if (userData.schoolCode === schoolCode && userData.role === 'student') {
+                const option = document.createElement('option');
+                option.value = childSnapshot.key; // Use student's UID as value
+                option.textContent = userData.fullName; // Show student's full name in the dropdown
+                studentList.appendChild(option);
+                studentsFound = true;
+            }
+        });
+
+        if (!studentsFound) {
+            const option = document.createElement('option');
+            option.textContent = 'No students found';
+            option.disabled = true;
+            studentList.appendChild(option);
+        }
+    } catch (error) {
+        console.error('Failed to load students list:', error);
+    }
+}
+
+// Adjust points for a student (Only for teachers)
+window.adjustPoints = async function (points) {
+    const studentUid = document.getElementById('student-list').value;
+
+    if (studentUid) {
+        try {
+            const studentRef = ref(db, `users/${studentUid}`);
+            const studentSnapshot = await get(studentRef);
+
+            if (studentSnapshot.exists()) {
+                const studentData = studentSnapshot.val();
+                const newPoints = (studentData.points || 0) + points;
+
+                // Update points for the student
+                await update(studentRef, { points: newPoints });
+
+                // Update leaderboard
+                const leaderboardRef = ref(db, `schools/${studentData.schoolCode}/leaderboard/${studentUid}`);
+                await set(leaderboardRef, { name: studentData.fullName, points: newPoints });
+
+                alert('Points adjusted successfully!');
+                loadIndividualLeaderboard(studentData.schoolCode); // Reload leaderboard to reflect changes
+            }
+        } catch (error) {
+            console.error('Failed to adjust points:', error);
+        }
+    }
+}
+
+// Award badges to a student (Only for teachers)
+window.awardBadge = async function (badgeName) {
+    const studentUid = document.getElementById('student-list').value;
+
+    if (studentUid) {
+        try {
+            const badgesRef = ref(db, `users/${studentUid}/badges`);
+            const badgeSnapshot = await get(badgesRef);
+
+            let badges = badgeSnapshot.exists() ? badgeSnapshot.val() : [];
+            if (!badges.includes(badgeName)) {
+                badges.push(badgeName);
+                await set(badgesRef, badges);
+
+                alert('Badge awarded successfully!');
+            } else {
+                alert('Student already has this badge.');
+            }
+        } catch (error) {
+            console.error('Failed to award badge:', error);
+        }
+    }
+}
+
+// Load students for group assignment (For teachers)
+async function loadStudentsForGroupAssignment(schoolCode) {
+    try {
+        const usersRef = ref(db, 'users');
+        const snapshot = await get(usersRef);
+        const studentGroupList = document.getElementById('student-group-list');
+        studentGroupList.innerHTML = ''; // Clear the list first
+
+        snapshot.forEach((childSnapshot) => {
+            const userData = childSnapshot.val();
+            if (userData.schoolCode === schoolCode && userData.role === 'student') {
+                const option = document.createElement('option');
+                option.value = childSnapshot.key; // Use student's UID as value
+                option.textContent = userData.fullName; // Show student's full name in the dropdown
+                studentGroupList.appendChild(option);
+            }
+        });
+
+        if (studentGroupList.options.length === 0) {
+            const option = document.createElement('option');
+            option.textContent = 'No students found';
+            option.disabled = true;
+            studentGroupList.appendChild(option);
+        }
+    } catch (error) {
+        console.error('Failed to load students for group assignment:', error);
+    }
+}
+
+// Assign a student to a team
+window.assignTeam = async function () {
+    const studentUid = document.getElementById('student-group-list').value;
+    const teamName = document.getElementById('team-name').value;
+    const schoolCode = (await get(ref(db, 'users/' + studentUid))).val().schoolCode;
+
+    if (studentUid && teamName) {
+        try {
+            await update(ref(db, 'users/' + studentUid), { teamName: teamName });
+
+            // Update the team in the school's data
+            const teamRef = ref(db, `schools/${schoolCode}/teams/${teamName}/members`);
+            const teamSnapshot = await get(teamRef);
+            const members = teamSnapshot.exists() ? teamSnapshot.val() : [];
+            members.push(studentUid);
+
+            await set(ref(db, `schools/${schoolCode}/teams/${teamName}`), { members: members });
+            alert('Student assigned to team: ' + teamName);
+            loadTeams(schoolCode);
+        } catch (error) {
+            alert('Failed to assign team: ' + error.message);
+        }
+    }
+}
+
+// Load teams and display them (For teachers)
+async function loadTeams(schoolCode) {
+    try {
+        const teamsRef = ref(db, `schools/${schoolCode}/teams`);
+        const snapshot = await get(teamsRef);
+        const teamsList = document.getElementById('teams-list');
+        const teamSelect = document.getElementById('team-select');
+        teamsList.innerHTML = ''; // Clear the list first
+        teamSelect.innerHTML = ''; // Clear the list first
+
+        snapshot.forEach((childSnapshot) => {
+            const teamData = childSnapshot.val();
+            const teamContainer = document.createElement('div');
+            teamContainer.className = 'neumorphic p-4 mb-4';
+            const h4 = document.createElement('h4');
+            h4.textContent = `Team: ${childSnapshot.key}`;
+            h4.className = 'text-lg font-semibold mb-2 text-indigo-600';
+            teamContainer.appendChild(h4);
+
+            const membersList = document.createElement('ul');
+            membersList.className = 'space-y-1';
+
+            teamData.members.forEach((memberUid) => {
+                const memberRef = ref(db, `users/${memberUid}`);
+                get(memberRef).then((memberSnapshot) => {
+                    const memberData = memberSnapshot.val();
+                    const li = document.createElement('li');
+                    li.textContent = memberData.fullName;
+                    li.className = 'text-gray-700';
+                    membersList.appendChild(li);
+                });
+            });
+
+            teamContainer.appendChild(membersList);
+            teamsList.appendChild(teamContainer);
+
+            const option = document.createElement('option');
+            option.value = childSnapshot.key;
+            option.textContent = `Team: ${childSnapshot.key}`;
+            teamSelect.appendChild(option);
+        });
+
+        if (teamsList.children.length === 0) {
+            const noTeamsMessage = document.createElement('p');
+            noTeamsMessage.textContent = 'No teams found';
+            noTeamsMessage.className = 'text-gray-500 italic';
+            teamsList.appendChild(noTeamsMessage);
+        }
+
+    } catch (error) {
+        console.error('Failed to load teams:', error);
+    }
+}
+
+// Load the team of the logged-in student and display it (For students)
+async function loadStudentTeam(uid) {
+    try {
+        const userRef = ref(db, 'users/' + uid);
+        const userSnapshot = await get(userRef);
+        if (userSnapshot.exists()) {
+            const userData = userSnapshot.val();
+            const teamName = userData.teamName;
+            const schoolCode = userData.schoolCode;
+
+            if (teamName) {
+                const teamsRef = ref(db, `schools/${schoolCode}/teams/${teamName}`);
+                const teamSnapshot = await get(teamsRef);
+
+                if (teamSnapshot.exists()) {
+                    const teamData = teamSnapshot.val();
+                    const teamList = document.getElementById('student-team-members');
+                    teamList.innerHTML = ''; // Clear the list first
+
+                    const teamNameElement = document.getElementById('student-team-name');
+                    teamNameElement.textContent = teamName;
+
+                    teamData.members.forEach((memberId) => {
+                        const memberRef = ref(db, `users/${memberId}`);
+                        get(memberRef).then((memberSnapshot) => {
+                            const memberData = memberSnapshot.val();
+                            const li = document.createElement('li');
+                            li.textContent = memberData.fullName;
+                            li.className = 'text-gray-700';
+                            teamList.appendChild(li);
+                        });
+                    });
+
+                    // Load team messages
+                    loadTeamMessages(schoolCode, teamName);
+
+                    // Display the student team info section
+                    document.getElementById('student-team-info').style.display = 'block';
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Failed to load student team:', error);
+    }
+}
+
+// Load team messages and set up real-time listeners
+async function loadTeamMessages(schoolCode, teamName) {
+    try {
+        const messagesRef = ref(db, `schools/${schoolCode}/teams/${teamName}/messages`);
+        const messagesList = document.getElementById('student-messages-list');
+        messagesList.innerHTML = ''; // Clear the list first
+
+        // Listen for new messages in real-time
+        onValue(messagesRef, (snapshot) => {
+            messagesList.innerHTML = ''; // Clear the list before appending new messages
+
+            snapshot.forEach((childSnapshot) => {
+                const messageData = childSnapshot.val();
+                const messageId = childSnapshot.key;
+                const messageContainer = document.createElement('div');
+                messageContainer.className = 'message-container p-4 rounded-lg shadow-md mb-4 bg-white';
+
+                const messageHeader = document.createElement('div');
+                messageHeader.className = 'message-header font-semibold text-indigo-600 mb-1';
+
+                const messageText = document.createElement('div');
+                messageText.className = 'message-text text-gray-800';
+
+                const messageTimestamp = document.createElement('div');
+                messageTimestamp.className = 'message-timestamp text-sm text-gray-500';
+
+                messageHeader.textContent = messageData.senderName;
+                messageText.textContent = messageData.text;
+                messageTimestamp.textContent = new Date(messageData.timestamp).toLocaleString();
+
+const messageActions = document.createElement('div');
+messageActions.className = 'message-actions flex justify-end mt-2';
+messageActions.innerHTML = `
+    <button class="like-button neumorphic-button py-1 px-3 text-indigo-600 font-semibold mr-2" onclick="likeMessage('${messageId}')">Like (<span id="like-count-${messageId}">${messageData.likes ? messageData.likes.length : 0}</span>)</button>
+    <button class="dislike-button neumorphic-button py-1 px-3 text-indigo-600 font-semibold" onclick="dislikeMessage('${messageId}')">Dislike (<span id="dislike-count-${messageId}">${messageData.dislikes ? messageData.dislikes.length : 0}</span>)</button>
+`;
+
+messageContainer.appendChild(messageHeader);
+messageContainer.appendChild(messageText);
+messageContainer.appendChild(messageTimestamp);
+messageContainer.appendChild(messageActions);
+messagesList.appendChild(messageContainer);
+});
+});
+} catch (error) {
+console.error('Failed to load team messages:', error);
+}
+}
+
+// Function to like a message
+window.likeMessage = async function (messageId) {
+const user = auth.currentUser;
+const schoolCode = (await get(ref(db, 'users/' + user.uid))).val().schoolCode;
+const teamName = (await get(ref(db, 'users/' + user.uid))).val().teamName;
+
+const likeRef = ref(db, `schools/${schoolCode}/teams/${teamName}/messages/${messageId}/likes`);
+const dislikeRef = ref(db, `schools/${schoolCode}/teams/${teamName}/messages/${messageId}/dislikes`);
+
+const likesSnapshot = await get(likeRef);
+let likes = likesSnapshot.exists() ? likesSnapshot.val() : [];
+
+const dislikesSnapshot = await get(dislikeRef);
+let dislikes = dislikesSnapshot.exists() ? dislikesSnapshot.val() : [];
+
+if (!likes.includes(user.uid)) {
+likes.push(user.uid);
+
+// Remove from dislikes if user had previously disliked the message
+dislikes = dislikes.filter(uid => uid !== user.uid);
+
+await set(likeRef, likes);
+await set(dislikeRef, dislikes);
+
+document.getElementById(`like-count-${messageId}`).textContent = likes.length;
+document.getElementById(`dislike-count-${messageId}`).textContent = dislikes.length;
+}
+}
+
+// Function to dislike a message
+window.dislikeMessage = async function (messageId) {
+const user = auth.currentUser;
+const schoolCode = (await get(ref(db, 'users/' + user.uid))).val().schoolCode;
+const teamName = (await get(ref(db, 'users/' + user.uid))).val().teamName;
+
+const likeRef = ref(db, `schools/${schoolCode}/teams/${teamName}/messages/${messageId}/likes`);
+const dislikeRef = ref(db, `schools/${schoolCode}/teams/${teamName}/messages/${messageId}/dislikes`);
+
+const likesSnapshot = await get(likeRef);
+let likes = likesSnapshot.exists() ? likesSnapshot.val() : [];
+
+const dislikesSnapshot = await get(dislikeRef);
+let dislikes = dislikesSnapshot.exists() ? dislikesSnapshot.val() : [];
+
+if (!dislikes.includes(user.uid)) {
+dislikes.push(user.uid);
+
+// Remove from likes if user had previously liked the message
+likes = likes.filter(uid => uid !== user.uid);
+
+await set(dislikeRef, dislikes);
+await set(likeRef, likes);
+
+document.getElementById(`like-count-${messageId}`).textContent = likes.length;
+document.getElementById(`dislike-count-${messageId}`).textContent = dislikes.length;
+}
+}
+
+// Send a message in the team chat
+window.sendMessage = async function () {
+const messageText = document.getElementById('team-message-input').value;
+const user = auth.currentUser;
+
+if (messageText.trim() !== '') {
+try {
+const userRef = ref(db, 'users/' + user.uid);
+const userSnapshot = await get(userRef);
+if (userSnapshot.exists()) {
+const userData = userSnapshot.val();
+const teamName = userData.teamName;
+const schoolCode = userData.schoolCode;
+
+if (teamName) {
+    const messagesRef = ref(db, `schools/${schoolCode}/teams/${teamName}/messages`);
+    const newMessageRef = push(messagesRef);
+    await set(newMessageRef, {
+        senderId: user.uid,
+        senderName: userData.fullName,
+        text: messageText,
+        timestamp: Date.now()
+    });
+
+    // Clear the input field
+    document.getElementById('team-message-input').value = '';
+}
+}
+} catch (error) {
+console.error('Failed to send message:', error);
+}
+}
+}
+
+// Award points to a team
+window.awardTeamPoints = async function (points) {
+const teamName = document.getElementById('team-select').value;
+const schoolCode = (await get(ref(db, `users/${auth.currentUser.uid}`))).val().schoolCode;
+
+if (teamName) {
+try {
+const teamRef = ref(db, `schools/${schoolCode}/teams/${teamName}`);
+const teamSnapshot = await get(teamRef);
+
+if (teamSnapshot.exists()) {
+const teamData = teamSnapshot.val();
+const newPoints = (teamData.points || 0) + points;
+
+// Update points for the team
+await update(teamRef, { points: newPoints });
+
+alert('Points awarded successfully!');
+loadTeams(schoolCode); // Reload teams to reflect changes
+}
+} catch (error) {
+console.error('Failed to award team points:', error);
+}
+}
+}
+
+// Logout function
+window.logout = function () {
+signOut(auth).then(() => {
+document.getElementById('auth-container').style.display = 'flex';
+document.getElementById('sidebar').style.display = 'none';
+document.getElementById('main-content').style.display = 'none';
+}).catch((error) => {
+console.error('Failed to logout:', error);
+});
+}
+
+// Show dashboard
+window.showDashboard = function () {
+document.getElementById('lesson-content').style.display = 'block';
+document.getElementById('lessons-section').style.display = 'none';
+document.getElementById('lesson-management').style.display = 'none';
+}
+
+// Show lessons
+window.showLessons = function () {
+document.getElementById('lesson-content').style.display = 'none';
+document.getElementById('lessons-section').style.display = 'block';
+document.getElementById('lesson-management').style.display = 'none';
+loadLessons();
+}
+
+// Load lessons
+async function loadLessons() {
+    try {
+        const lessonsRef = ref(db, 'lessons');
+        const snapshot = await get(lessonsRef);
+        const lessonsList = document.getElementById('lessons-list');
+        lessonsList.innerHTML = ''; // Clear the list first
+
+        snapshot.forEach((childSnapshot) => {
+            const lessonData = childSnapshot.val();
+            const lessonCard = document.createElement('div');
+            lessonCard.className = 'neumorphic lesson-card p-4 rounded-lg mb-4 shadow-md cursor-pointer';
+            lessonCard.addEventListener('click', () => openLessonModal(lessonData));
+            lessonCard.innerHTML = `
+                <h4 class="lesson-card-header font-semibold">${lessonData.title}</h4>
+                <div class="lesson-card-content hidden">${lessonData.content}</div>
+            `;
+            lessonsList.appendChild(lessonCard);
+        });
+    } catch (error) {
+        console.error('Failed to load lessons:', error);
+    }
+}
+
+// Open lesson modal
+window.openLessonModal = function (lessonData) {
+document.getElementById('modal-lesson-title').textContent = lessonData.title;
+document.getElementById('modal-lesson-task').textContent = lessonData.task || 'No task specified.';
+document.getElementById('modal-lesson-content').innerHTML = lessonData.content || 'No content available.';
+document.getElementById('modal-lesson-image').src = lessonData.imageUrl || '';
+document.getElementById('modal-lesson-pdf').href = lessonData.pdfUrl || '#';
+document.getElementById('modal-lesson-link').href = lessonData.link || '#';
+document.getElementById('lesson-modal').style.display = 'flex';
+}
+
+// Close lesson modal
+window.closeLessonModal = function () {
+document.getElementById('lesson-modal').style.display = 'none';
+}
+
+// Show lesson management section
+window.showLessonManagement = function () {
+document.getElementById('lesson-content').style.display = 'none';
+document.getElementById('lessons-section').style.display = 'none';
+document.getElementById('lesson-management').style.display = 'block';
+loadLessonsForManagement();
+}
+
+// Show add lesson form
+window.showAddLessonForm = function () {
+document.getElementById('add-lesson-form').style.display = 'block';
+}
+
+// Save a new lesson
+window.saveLesson = async function () {
+const title = document.getElementById('lesson-title').value;
+const task = document.getElementById('lesson-task').value;
+const content = quill.root.innerHTML;
+const lessonImage = document.getElementById('lesson-image').files[0];
+const pdfFile = document.getElementById('lesson-pdf').files[0];
+const link = document.getElementById('lesson-link').value;
+
+const lessonId = push(ref(db, 'lessons')).key;
+
+try {
+let imageUrl = '';
+if (lessonImage) {
+const storageReference = storageRef(storage, 'lessons/' + lessonId + '/image');
+const snapshot = await uploadBytes(storageReference, lessonImage);
+imageUrl = await getDownloadURL(snapshot.ref);
+}
+
+let pdfUrl = '';
+if (pdfFile) {
+const storageReference = storageRef(storage, 'lessons/' + lessonId + '/pdf');
+const snapshot = await uploadBytes(storageReference, pdfFile);
+pdfUrl = await getDownloadURL(snapshot.ref);
+}
+
+await set(ref(db, 'lessons/' + lessonId), {
+title: title,
+task: task,
+content: content,
+imageUrl: imageUrl,
+pdfUrl: pdfUrl,
+link: link
+});
+
+alert('Lesson saved successfully!');
+showLessons(); // Show lessons after saving a new one
+} catch (error) {
+console.error('Failed to save lesson:', error);
+}
+}
+
+// Load lessons for management
+async function loadLessonsForManagement() {
+try {
+const lessonsRef = ref(db, 'lessons');
+const snapshot = await get(lessonsRef);
+const lessonsList = document.getElementById('lessons-management-list');
+lessonsList.innerHTML = ''; // Clear the list first
+
+snapshot.forEach((childSnapshot) => {
+const lessonData = childSnapshot.val();
+const lessonCard = document.createElement('div');
+lessonCard.className = 'neumorphic lesson-card p-4 rounded-lg mb-4 shadow-md';
+lessonCard.innerHTML = `
+<h4 class="lesson-card-header font-semibold text-indigo-600">${lessonData.title}</h4>
+<div class="lesson-card-body">
+    <div class="lesson-card-content hidden">${lessonData.content}</div>
+    <button class="neumorphic-button py-2 px-4 text-indigo-600 font-semibold" onclick="deleteLesson('${childSnapshot.key}')">Delete</button>
+</div>
+`;
+lessonsList.appendChild(lessonCard);
+});
+} catch (error) {
+console.error('Failed to load lessons for management:', error);
+}
+}
+
+// Delete a lesson
+window.deleteLesson = async function (lessonId) {
+try {
+await set(ref(db, 'lessons/' + lessonId), null);
+alert('Lesson deleted successfully!');
+loadLessonsForManagement(); // Reload lessons after deletion
+} catch (error) {
+console.error('Failed to delete lesson:', error);
+}
+}
+
+// Autonomy Mode Features
+
+// Initialize Autonomy Mode
+function initAutonomyMode(uid) {
+    document.getElementById('theme-selection').style.display = 'block';
+    document.getElementById('pomodoro-timer').style.display = 'block';
+    document.getElementById('microblog-section').style.display = 'block';
+    loadTheme(uid);
+    initPomodoroTimer();
+    initMicroblog(uid);
+}
+
+// Load user's theme
+async function loadTheme(uid) {
+const userRef = ref(db, `users/${uid}`);
+const snapshot = await get(userRef);
+if (snapshot.exists()) {
+const userData = snapshot.val();
+if (userData.theme) {
+applyTheme(userData.theme);
+}
+}
+}
+
+function applyTheme(theme) {
+    const body = document.body;
+    const mainContent = document.getElementById('main-content');
+    const sidebar = document.getElementById('sidebar');
+    console.log('Applying theme:', theme);
+
+    // Remove all theme classes
+    body.classList.remove('theme-default', 'theme-dark', 'theme-light', 'theme-nature', 'theme-light-blue', 'theme-light-orange', 'theme-yellow', 'theme-colorful');
+    mainContent.classList.remove('theme-default', 'theme-dark', 'theme-light', 'theme-nature', 'theme-light-blue', 'theme-light-orange', 'theme-yellow', 'theme-colorful');
+
+    // Apply new theme class
+    body.classList.add(`theme-${theme}`);
+    mainContent.classList.add(`theme-${theme}`);
+
+    // Apply theme to sidebar only for autonomy mode
+    const userRef = ref(db, 'users/' + auth.currentUser.uid);
+    get(userRef).then((snapshot) => {
+        if (snapshot.exists()) {
+            const userData = snapshot.val();
+            if (userData.gamificationMode === 'autonomy') {
+                sidebar.classList.add(`theme-${theme}`);
+            } else {
+                sidebar.classList.remove('theme-default', 'theme-dark', 'theme-light', 'theme-nature', 'theme-light-blue', 'theme-light-orange', 'theme-yellow', 'theme-colorful');
+            }
+        }
+    });
+
+    // Force re-render of lesson cards
+    if (document.getElementById('lessons-list')) {
+        loadLessons();
+    }
+
+    console.log('Theme applied:', theme);
+}
+
+// Change theme
+window.changeTheme = async function (theme) {
+const user = auth.currentUser;
+if (user) {
+try {
+await update(ref(db, `users/${user.uid}`), { theme: theme });
+applyTheme(theme);
+alert('Theme updated successfully!');
+} catch (error) {
+console.error('Failed to update theme:', error);
+alert('Failed to update theme. Please try again.');
+}
+}
+}
+
+// Show theme selection
+window.showThemeSelection = function () {
+    hideAllSections();
+    document.getElementById('theme-selection').style.display = 'block';
+    document.getElementById('pomodoro-timer').style.display = 'block';
+}
+
+// Helper function to hide all sections
+function hideAllSections() {
+    const sections = ['lesson-content', 'lessons-section', 'lesson-management', 'theme-selection', 'pomodoro-timer'];
+    sections.forEach(section => {
+        document.getElementById(section).style.display = 'none';
+    });
+}
+
+// Initialize Quill editor for lesson content
+const quill = new Quill('#lesson-editor', {
+theme: 'snow'
+});
+
+// Load dashboard after authentication state changes
+auth.onAuthStateChanged((user) => {
+if (user) {
+loadDashboard(user);
+}
+});
+
+let timer;
+let timeLeft = 1500; // 25 minutes in seconds
+let isRunning = false;
+let currentTimerType = 'pomodoro';
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    document.getElementById('timer-display').textContent = 
+        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function startTimer() {
+    if (!isRunning) {
+        isRunning = true;
+        document.getElementById('start-timer').textContent = 'Pause';
+        timer = setInterval(() => {
+            timeLeft--;
+            updateTimerDisplay();
+            if (timeLeft === 0) {
+                clearInterval(timer);
+                isRunning = false;
+                document.getElementById('start-timer').textContent = 'Start';
+                document.getElementById('timer-audio').play();
+            }
+        }, 1000);
+    } else {
+        clearInterval(timer);
+        isRunning = false;
+        document.getElementById('start-timer').textContent = 'Resume';
+    }
+}
+
+function resetTimer() {
+    clearInterval(timer);
+    isRunning = false;
+    setTimerDuration(currentTimerType);
+    updateTimerDisplay();
+    document.getElementById('start-timer').textContent = 'Start';
+}
+
+function setTimerDuration(type) {
+    const durationInputId = type === 'pomodoro' ? 'pomodoro-time' :
+                            type === 'shortBreak' ? 'short-break-time' : 'long-break-time';
+    const duration = parseInt(document.getElementById(durationInputId).value);
+    timeLeft = duration * 60;
+    currentTimerType = type;
+}
+
+function setTimerType(type) {
+    setTimerDuration(type);
+    resetTimer();
+    document.querySelectorAll('.pomodoro-type').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+function initPomodoroTimer(uid) {
+    document.getElementById('start-timer').addEventListener('click', startTimer);
+    document.getElementById('reset-timer').addEventListener('click', resetTimer);
+    document.querySelectorAll('.pomodoro-type').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            setTimerType(e.target.getAttribute('data-type'));
+        });
+    });
+    document.querySelectorAll('#pomodoro-timer input[type="number"]').forEach(input => {
+        input.addEventListener('change', () => {
+            if (currentTimerType === input.id.replace('-time', '')) {
+                setTimerDuration(currentTimerType);
+                updateTimerDisplay();
+                saveTimerSettings(uid);
+            }
+        });
+    });
+    loadTimerSettings(uid);
+}
+
+async function loadTimerSettings(uid) {
+    const db = getDatabase();
+    const timerSettingsRef = ref(db, `users/${uid}/timerSettings`);
+    
+    try {
+        const snapshot = await get(timerSettingsRef);
+        if (snapshot.exists()) {
+            const settings = snapshot.val();
+            document.getElementById('pomodoro-time').value = settings.pomodoro;
+            document.getElementById('short-break-time').value = settings.shortBreak;
+            document.getElementById('long-break-time').value = settings.longBreak;
+            setTimerDuration(currentTimerType);
+            updateTimerDisplay();
+        }
+    } catch (error) {
+        console.error("Error loading timer settings:", error);
+    }
+}
+
+async function saveTimerSettings(uid) {
+    const db = getDatabase();
+    const timerSettingsRef = ref(db, `users/${uid}/timerSettings`);
+    
+    const settings = {
+        pomodoro: parseInt(document.getElementById('pomodoro-time').value),
+        shortBreak: parseInt(document.getElementById('short-break-time').value),
+        longBreak: parseInt(document.getElementById('long-break-time').value)
+    };
+    
+    try {
+        await set(timerSettingsRef, settings);
+        console.log("Timer settings saved successfully");
+    } catch (error) {
+        console.error("Error saving timer settings:", error);
+    }
+}
+
+window.showPomodoroTimer = function () {
+    hideAllSections();
+    document.getElementById('pomodoro-timer').style.display = 'block';
+}
+
+// Initialize Microblog
+function initMicroblog(uid) {
+    loadPosts(uid);
+    document.getElementById('submit-post').addEventListener('click', () => createPost(uid));
+    document.querySelectorAll('.mood-emoji').forEach(btn => {
+        btn.addEventListener('click', (e) => selectMood(e.target));
+    });
+}
+
+// Create a new post
+async function createPost(uid) {
+    const content = document.getElementById('post-content').value;
+    const selectedMood = document.querySelector('.mood-emoji.selected');
+    const mood = selectedMood ? selectedMood.getAttribute('data-mood') : null;
+
+    if (content.trim() === '') {
+        alert('Please enter some content for your post.');
+        return;
+    }
+
+    try {
+        const postsRef = ref(db, `microblogs/${uid}`);
+        const newPostRef = push(postsRef);
+        const postData = {
+            content: content,
+            mood: mood,
+            timestamp: serverTimestamp()
+        };
+        await set(newPostRef, postData);
+
+        document.getElementById('post-content').value = '';
+        document.querySelectorAll('.mood-emoji').forEach(btn => btn.classList.remove('selected'));
+
+        console.log('Post created successfully:', postData);
+    } catch (error) {
+        console.error('Failed to create post:', error);
+        alert('Failed to create post. Please try again.');
+    }
+}
+
+// Load posts for a user
+async function loadPosts(uid) {
+    try {
+        const postsRef = ref(db, `microblogs/${uid}`);
+        const postsContainer = document.getElementById('posts-container');
+        postsContainer.innerHTML = '';
+
+        // Use onValue to listen for real-time updates
+        onValue(postsRef, (snapshot) => {
+            postsContainer.innerHTML = ''; // Clear existing posts
+            if (snapshot.exists()) {
+                const posts = [];
+                snapshot.forEach((childSnapshot) => {
+                    posts.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
+                });
+
+                // Sort posts by timestamp in descending order (newest first)
+                posts.sort((a, b) => b.timestamp - a.timestamp);
+
+                posts.forEach((post) => {
+                    const postElement = createPostElement(post);
+                    postsContainer.appendChild(postElement);
+                });
+
+                console.log('Posts loaded:', posts);
+            } else {
+                postsContainer.innerHTML = '<p class="text-gray-500 italic">No posts yet.</p>';
+                console.log('No posts found for user:', uid);
+            }
+        });
+    } catch (error) {
+        console.error('Failed to load posts:', error);
+    }
+}
+// Create a post element
+async function createPost(uid) {
+    const content = document.getElementById('post-content').value;
+    const selectedMood = document.querySelector('.mood-emoji.selected');
+    const mood = selectedMood ? selectedMood.getAttribute('data-mood') : null;
+
+    if (content.trim() === '') {
+        alert('Please enter some content for your post.');
+        return;
+    }
+
+    try {
+        const postsRef = ref(db, `microblogs/${uid}`);
+        const newPostRef = push(postsRef);
+        const postData = {
+            content: content,
+            mood: mood,
+            timestamp: serverTimestamp()
+        };
+        await set(newPostRef, postData);
+
+        document.getElementById('post-content').value = '';
+        document.querySelectorAll('.mood-emoji').forEach(btn => btn.classList.remove('selected'));
+
+        console.log('Post created successfully:', postData);
+    } catch (error) {
+        console.error('Failed to create post:', error);
+        alert('Failed to create post. Please try again.');
+    }
+}
+
+// Get mood emoji
+function getMoodEmoji(mood) {
+    const emojis = {
+        happy: '😊',
+        sad: '😢',
+        excited: '😃',
+        tired: '😴',
+        neutral: '😐'
+    };
+    return emojis[mood] || '';
+}
+
+// Select mood
+function selectMood(moodElement) {
+    document.querySelectorAll('.mood-emoji').forEach(btn => btn.classList.remove('selected'));
+    moodElement.classList.add('selected');
+}
+
+// Load dashboard after authentication state changes
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        loadDashboard(user);
+        if (user.uid) {
+            loadUserRole(user.uid);
+        }
+    }
+});
+
+// Load user role
+async function loadUserRole(uid) {
+    try {
+        const userRef = ref(db, `users/${uid}`);
+        const snapshot = await get(userRef);
+        if (snapshot.exists()) {
+            const userData = snapshot.val();
+            if (userData.role === 'teacher') {
+                initTeacherView(userData.schoolCode);
+            }
+        }
+    } catch (error) {
+        console.error('Failed to load user role:', error);
+    }
+}
+
+// Initialize teacher view
+function initTeacherView(schoolCode) {
+    document.getElementById('teacher-microblog-view').style.display = 'block';
+    loadStudentsForMicroblog(schoolCode);
+}
+
+// Load students for teacher's microblog view
+async function loadStudentsForMicroblog(schoolCode) {
+    try {
+        const usersRef = ref(db, 'users');
+        const snapshot = await get(usersRef);
+        const studentSelect = document.getElementById('student-microblog-select');
+        studentSelect.innerHTML = '<option value="">Select a student</option>';
+
+        snapshot.forEach((childSnapshot) => {
+            const userData = childSnapshot.val();
+            if (userData.schoolCode === schoolCode && userData.role === 'student') {
+                const option = document.createElement('option');
+                option.value = childSnapshot.key;
+                option.textContent = userData.fullName;
+                studentSelect.appendChild(option);
+            }
+        });
+
+        studentSelect.addEventListener('change', (e) => {
+            if (e.target.value) {
+                loadStudentPosts(e.target.value);
+            }
+        });
+    } catch (error) {
+        console.error('Failed to load students for microblog:', error);
+    }
+}
+
+// Load student posts for teacher view
+function loadStudentPosts(studentUid) {
+    const postsRef = ref(db, `microblogs/${studentUid}`);
+    const postsContainer = document.getElementById('teacher-posts-container');
+    postsContainer.innerHTML = '';
+
+    onValue(postsRef, (snapshot) => {
+        postsContainer.innerHTML = ''; // Clear existing posts
+        if (snapshot.exists()) {
+            const posts = [];
+            snapshot.forEach((childSnapshot) => {
+                posts.push({
+                    id: childSnapshot.key,
+                    ...childSnapshot.val()
+                });
+            });
+
+            // Sort posts by timestamp in descending order (newest first)
+            posts.sort((a, b) => b.timestamp - a.timestamp);
+
+            posts.forEach((post) => {
+                const postElement = createPostElement(post);
+                postsContainer.appendChild(postElement);
+            });
+
+            console.log('Student posts loaded:', posts);
+        } else {
+            postsContainer.innerHTML = '<p class="text-gray-500 italic">No posts yet for this student.</p>';
+            console.log('No posts found for student:', studentUid);
+        }
+    });
+}
+
+async function clearAllPosts(uid) {
+    try {
+        const postsRef = ref(db, `microblogs/${uid}`);
+        await set(postsRef, null);
+        console.log('All posts cleared for user:', uid);
+        loadPosts(uid); // Reload the posts (should show no posts)
+    } catch (error) {
+        console.error('Failed to clear posts:', error);
+    }
+}
+
+const postsContainer = document.getElementById('posts-container');
+
+// Attach an event listener to the Firebase reference
+const postsRef = ref(db, 'posts/');
+onChildAdded(postsRef, (snapshot) => {
+    const post = snapshot.val();
+    const postId = snapshot.key;
+    
+    // Check if the post already exists in the DOM
+    if (!document.getElementById(postId)) {
+        const postElement = document.createElement('div');
+        postElement.id = postId;
+        postElement.className = 'post-card';
+        postElement.innerHTML = `
+            <p>${post.content}</p>
+            <span>${post.timestamp}</span>
+        `;
+        postsContainer.appendChild(postElement);
+    }
+});
+
+
+function createPostElement(post) {
+    const postElement = document.createElement('div');
+    postElement.className = 'neumorphic p-4 rounded-lg mb-4 shadow-md post-card';
+    
+    const moodEmoji = post.mood ? `<span class="text-2xl mr-2">${getMoodEmoji(post.mood)}</span>` : '';
+    const formattedDate = new Date(post.timestamp).toLocaleString();
+
+    postElement.innerHTML = `
+        <div class="flex justify-between items-start mb-2">
+            ${moodEmoji}
+            <span class="text-sm text-gray-500">${formattedDate}</span>
+        </div>
+        <p class="text-gray-800">${post.content}</p>
+    `;
+
+    return postElement;
+}
+
+
+// Add pulsating effect to post cards
+function addPulsatingEffect() {
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(159, 122, 234, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(159, 122, 234, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(159, 122, 234, 0);
+            }
+        }
+        .post-card {
+            animation: pulse 2s infinite;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Call this function when the page loads
+addPulsatingEffect();
+
+// ... (rest of the code remains the same)
+
+function toggleGamificationMode() {
+    const roleSelect = document.getElementById('register-role');
+    const gamificationModeSelect = document.getElementById('register-gamification-mode');
+    
+    if (roleSelect.value === 'teacher') {
+        gamificationModeSelect.classList.remove('hidden');
+        gamificationModeSelect.required = true;
+    } else {
+        gamificationModeSelect.classList.add('hidden');
+        gamificationModeSelect.required = false;
+        gamificationModeSelect.value = ''; // Reset the selection
+    }
+}
+
+// Call this function once when the page loads to set the initial state
+document.addEventListener('DOMContentLoaded', toggleGamificationMode);
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Display gamification mode selection when registering as a teacher
+    document.getElementById('register-role').addEventListener('change', function() {
+        const role = this.value;
+        const gamificationModeField = document.getElementById('register-gamification-mode');
+        if (role === 'teacher') {
+            gamificationModeField.style.display = 'block';
+        } else {
+            gamificationModeField.style.display = 'none';
+        }
+    });
+});
+
+window.registerUser = async function () {
+    const email = document.getElementById('register-email').value;
+    const password = document.getElementById('register-password').value;
+
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        console.log("Registration successful", userCredential.user);
+        alert('Registration successful! You can now log in.');
+    } catch (error) {
+        console.error('Registration failed:', error);
+        alert('Registration failed: ' + error.message);
+    }
+}
+
+</script>
+</body>
+</html>
