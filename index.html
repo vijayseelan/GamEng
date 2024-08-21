@@ -645,68 +645,132 @@ body {
         --sidebar-text: #FFFFFF;
     }
 
-    .theme-dark {
-        --bg-color: #1a202c;
-        --text-color: #e2e8f0;
-        --card-bg: #2d3748;
-        --card-text: #e2e8f0;
-        --sidebar-bg: #2d3748;
-        --sidebar-text: #e2e8f0;
-    }
+   
+/* Dark Theme */
+.theme-dark {
+    background: linear-gradient(135deg, #121212, #1E1E1E, #2C2C2C);
+    color: #E0E0E0;
+}
+.theme-dark #sidebar { 
+    background-color: rgba(18, 18, 18, 0.9); 
+}
+.theme-dark .neumorphic-button { 
+    background-color: #3A3A3A; 
+    color: #E0E0E0; 
+    box-shadow: 3px 3px 6px #0a0a0a, -3px -3px 6px #3e3e3e;
+}
+.theme-dark .neumorphic-button:hover {
+    box-shadow: inset 3px 3px 6px #0a0a0a, inset -3px -3px 6px #3e3e3e;
+}
+.theme-dark #main-content {
+    background-color: rgba(30, 30, 30, 0.8);
+}
 
-    .theme-light {
-        --bg-color: #f7fafc;
-        --text-color: #1a202c;
-        --card-bg: #ffffff;
-        --card-text: #1a202c;
-        --sidebar-bg: #edf2f7;
-        --sidebar-text: #1a202c;
-    }
+/* Light Theme */
+.theme-light {
+    background: linear-gradient(135deg, #F5F5F5, #E0E0E0, #FAFAFA);
+    color: #333333;
+}
+.theme-light #sidebar { 
+    background-color: rgba(224, 224, 224, 0.9); 
+    color: #333333;
+}
+.theme-light .neumorphic-button { 
+    background-color: #E0E0E0; 
+    color: #333333; 
+    box-shadow: 3px 3px 6px #bebebe, -3px -3px 6px #ffffff;
+}
+.theme-light .neumorphic-button:hover {
+    box-shadow: inset 3px 3px 6px #bebebe, inset -3px -3px 6px #ffffff;
+}
+.theme-light #main-content {
+    background-color: rgba(250, 250, 250, 0.8);
+}
 
-    .theme-nature {
-        --bg-color: #f0fff4;
-        --text-color: #22543d;
-        --card-bg: #c6f6d5;
-        --card-text: #22543d;
-        --sidebar-bg: #9ae6b4;
-        --sidebar-text: #22543d;
-    }
+/* Nature Theme */
+.theme-nature {
+    background: linear-gradient(135deg, #4CAF50, #8BC34A, #CDDC39);
+    color: #1B5E20;
+}
+.theme-nature #sidebar { 
+    background-color: rgba(76, 175, 80, 0.9); 
+    color: #FFFFFF;
+}
+.theme-nature .neumorphic-button { 
+    background-color: #66BB6A; 
+    color: #FFFFFF; 
+    box-shadow: 3px 3px 6px #3e8e41, -3px -3px 6px #8ed082;
+}
+.theme-nature .neumorphic-button:hover {
+    box-shadow: inset 3px 3px 6px #3e8e41, inset -3px -3px 6px #8ed082;
+}
+.theme-nature #main-content {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #1B5E20;
+}
+    /* Ocean Breeze */
+.theme-ocean-breeze {
+    background: linear-gradient(135deg, #48CAE4, #0096C7, #023E8A);
+    color: #E0F2FE;
+}
+.theme-ocean-breeze #sidebar { background-color: rgba(2, 62, 138, 0.9); }
+.theme-ocean-breeze .neumorphic-button { background-color: #0077B6; color: white; }
 
-    .theme-light-blue {
-        --bg-color: #e6f2ff;
-        --text-color: #1e3a8a;
-        --card-bg: #ffffff;
-        --card-text: #1e3a8a;
-        --sidebar-bg: #bfdbfe;
-        --sidebar-text: #1e3a8a;
-    }
+/* Sunset Glow */
+.theme-sunset-glow {
+    background: linear-gradient(135deg, #FF9E00, #FF4E50, #F9C80E);
+    color: #4A0E0E;
+}
+.theme-sunset-glow #sidebar { background-color: rgba(249, 200, 14, 0.9); color: #4A0E0E; }
+.theme-sunset-glow .neumorphic-button { background-color: #FF4E50; color: white; }
 
-    .theme-light-orange {
-        --bg-color: #fff7ed;
-        --text-color: #9a3412;
-        --card-bg: #ffedd5;
-        --card-text: #9a3412;
-        --sidebar-bg: #fed7aa;
-        --sidebar-text: #9a3412;
-    }
+/* Forest Mist */
+.theme-forest-mist {
+    background: linear-gradient(135deg, #2D6A4F, #40916C, #95D5B2);
+    color: #081C15;
+}
+.theme-forest-mist #sidebar { background-color: rgba(45, 106, 79, 0.9); color: #D8F3DC; }
+.theme-forest-mist .neumorphic-button { background-color: #1B4332; color: white; }
 
-    .theme-yellow {
-        --bg-color: #fefce8;
-        --text-color: #854d0e;
-        --card-bg: #fef9c3;
-        --card-text: #854d0e;
-        --sidebar-bg: #fde047;
-        --sidebar-text: #854d0e;
-    }
+/* Cosmic Purple */
+.theme-cosmic-purple {
+    background: linear-gradient(135deg, #7B2CBF, #9D4EDD, #C77DFF);
+    color: #FFEBFF;
+}
+.theme-cosmic-purple #sidebar { background-color: rgba(123, 44, 191, 0.9); }
+.theme-cosmic-purple .neumorphic-button { background-color: #5A189A; color: white; }
 
-    .theme-colorful {
-        --bg-color: #f0f9ff;
-        --text-color: #1e40af;
-        --card-bg: linear-gradient(45deg, #fecaca, #bfdbfe, #bbf7d0);
-        --card-text: #1e40af;
-        --sidebar-bg: linear-gradient(to bottom, #f9a8d4, #93c5fd, #86efac);
-        --sidebar-text: #1e40af;
-    }
+/* Citrus Burst */
+.theme-citrus-burst {
+    background: linear-gradient(135deg, #FF9F1C, #FFBF69, #CBF3F0);
+    color: #2EC4B6;
+}
+.theme-citrus-burst #sidebar { background-color: rgba(255, 159, 28, 0.9); color: #FFFFFF; }
+.theme-citrus-burst .neumorphic-button { background-color: #2EC4B6; color: white; }
+
+/* Midnight Sky */
+.theme-midnight-sky {
+    background: linear-gradient(135deg, #0B090A, #161A1D, #660708);
+    color: #F5F3F4;
+}
+.theme-midnight-sky #sidebar { background-color: rgba(22, 26, 29, 0.9); }
+.theme-midnight-sky .neumorphic-button { background-color: #660708; color: white; }
+
+/* Cherry Blossom */
+.theme-cherry-blossom {
+    background: linear-gradient(135deg, #FFB3BA, #FFDFBA, #FFFFBA);
+    color: #594A4E;
+}
+.theme-cherry-blossom #sidebar { background-color: rgba(255, 179, 186, 0.9); color: #594A4E; }
+.theme-cherry-blossom .neumorphic-button { background-color: #FF85A1; color: white; }
+
+/* Northern Lights */
+.theme-northern-lights {
+    background: linear-gradient(135deg, #01497C, #2C7DA0, #89C2D9);
+    color: #CAF0F8;
+}
+.theme-northern-lights #sidebar { background-color: rgba(1, 73, 124, 0.9); }
+.theme-northern-lights .neumorphic-button { background-color: #2C7DA0; color: white; }
 
     /* Pomodoro Timer styles */
     #timer-display {
@@ -1136,14 +1200,6 @@ body {
                 <div class="neumorphic p-6">
                     <h3 class="text-xl font-semibold mb-4 text-indigo-600">Theme Selection</h3>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <button onclick="changeTheme('default')" class="theme-button neumorphic-button py-2 px-4 text-indigo-600 font-semibold">Default</button>
-                        <button onclick="changeTheme('dark')" class="theme-button neumorphic-button py-2 px-4 text-gray-200 font-semibold bg-gray-800">Dark</button>
-                        <button onclick="changeTheme('light')" class="theme-button neumorphic-button py-2 px-4 text-gray-800 font-semibold bg-gray-100">Light</button>
-                        <button onclick="changeTheme('nature')" class="theme-button neumorphic-button py-2 px-4 text-green-800 font-semibold bg-green-200">Nature</button>
-                        <button onclick="changeTheme('light-blue')" class="theme-button neumorphic-button py-2 px-4 text-blue-800 font-semibold bg-blue-200">Light Blue</button>
-                        <button onclick="changeTheme('light-orange')" class="theme-button neumorphic-button py-2 px-4 text-orange-800 font-semibold bg-orange-200">Light Orange</button>
-                        <button onclick="changeTheme('yellow')" class="theme-button neumorphic-button py-2 px-4 text-yellow-800 font-semibold bg-yellow-200">Yellow</button>
-                        <button onclick="changeTheme('colorful')" class="theme-button neumorphic-button py-2 px-4 text-purple-800 font-semibold bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300">Colorful</button>
                     </div>
                 </div>
             </div>
@@ -2277,6 +2333,14 @@ window.showThemeSelection = function() {
             <button onclick="changeTheme('dark')" class="neumorphic-button p-4">Dark</button>
             <button onclick="changeTheme('light')" class="neumorphic-button p-4">Light</button>
             <button onclick="changeTheme('nature')" class="neumorphic-button p-4">Nature</button>
+            <button onclick="changeTheme('ocean-breeze')" class="neumorphic-button p-4">Ocean Breeze</button>
+            <button onclick="changeTheme('sunset-glow')" class="neumorphic-button p-4">Sunset Glow</button>
+            <button onclick="changeTheme('forest-mist')" class="neumorphic-button p-4">Forest Mist</button>
+            <button onclick="changeTheme('cosmic-purple')" class="neumorphic-button p-4">Cosmic Purple</button>
+            <button onclick="changeTheme('citrus-burst')" class="neumorphic-button p-4">Citrus Burst</button>
+            <button onclick="changeTheme('midnight-sky')" class="neumorphic-button p-4">Midnight Sky</button>
+            <button onclick="changeTheme('cherry-blossom')" class="neumorphic-button p-4">Cherry Blossom</button>
+            <button onclick="changeTheme('northern-lights')" class="neumorphic-button p-4">Northern Lights</button>
         </div>
     `;
 }
@@ -3525,7 +3589,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
 
 </script>
 </body>
