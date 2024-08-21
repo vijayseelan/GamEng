@@ -753,41 +753,55 @@ body {
         }
     }
 
+
+.like-btn, .dislike-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2em;
+    }
+    .like-btn:hover, .dislike-btn:hover {
+        opacity: 0.7;
+    }
+
+
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
 
-<div id="auth-container" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-    <div class="neumorphic p-8 w-full max-w-md">
-        <h1 id="app-name" class="text-4xl font-bold mb-6 text-center text-primary-color">GamEng!</h1>
-        <h2 id="auth-title" class="text-2xl font-bold mb-6 text-center text-indigo-600">Login</h2>
-        <div id="login-form">
-            <input type="email" id="login-email" placeholder="Email" required class="neumorphic-inset w-full p-3 mb-4" />
-            <input type="password" id="login-password" placeholder="Password" required class="neumorphic-inset w-full p-3 mb-4" />
-            <button id="login-button" class="neumorphic-button w-full py-3 px-4 text-indigo-600 font-semibold mb-4">Login</button>
-            <p class="text-center text-gray-600">Don't have an account? <a href="#" onclick="showRegister()" class="text-indigo-600 font-semibold">Register</a></p>
-        </div>
-
-        <div id="register-form" class="hidden">
-            <input type="text" id="register-school-code" placeholder="School Code" required class="neumorphic-inset w-full p-3 mb-4" />
-            <input type="text" id="register-fullname" placeholder="Full Name" required class="neumorphic-inset w-full p-3 mb-4" />
-            <input type="email" id="register-email" placeholder="Email" required class="neumorphic-inset w-full p-3 mb-4" />
-            <input type="password" id="register-password" placeholder="Password" required class="neumorphic-inset w-full p-3 mb-4" />
-            <select id="register-role" class="neumorphic-inset w-full p-3 mb-4" onchange="toggleGamificationMode()">
-                <option value="student">Student</option>
-                <option value="teacher">Teacher</option>
-            </select>
-            <select id="register-gamification-mode" class="neumorphic-inset w-full p-3 mb-4 hidden">
-                <option value="">Select Gamification Mode</option>
-                <option value="competence">Competence</option>
-                <option value="autonomy">Autonomy</option>
-                <option value="relatedness">Relatedness</option>
-            </select>
-            <button onclick="register()" class="neumorphic-button w-full py-3 px-4 text-indigo-600 font-semibold mb-4">Register</button>
-            <p class="text-center text-gray-600">Already have an account? <a href="#" onclick="showLogin()" class="text-indigo-600 font-semibold">Login</a></p>
+    <div id="auth-container" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+        <div class="neumorphic p-8 w-full max-w-md">
+            <h1 id="app-name" class="text-4xl font-bold mb-6 text-center text-primary-color">GamEng!</h1>
+            <h2 id="auth-title" class="text-2xl font-bold mb-6 text-center text-indigo-600">Login</h2>
+            
+            <div id="login-container">
+                <input type="email" id="login-email" placeholder="Email" required class="neumorphic-inset w-full p-3 mb-4" />
+                <input type="password" id="login-password" placeholder="Password" required class="neumorphic-inset w-full p-3 mb-4" />
+                <button id="login-button" onclick="login()" class="neumorphic-button w-full py-3 px-4 text-indigo-600 font-semibold mb-4">Login</button>
+                <p class="text-center text-gray-600">Don't have an account? <a href="#" onclick="showRegisterForm()" class="text-indigo-600 font-semibold">Register</a></p>
+            </div>
+    
+            <div id="register-container" class="hidden">
+                <input type="text" id="register-name" placeholder="Full Name" class="neumorphic-inset w-full p-3 mb-4">
+                <input type="email" id="register-email" placeholder="Email" class="neumorphic-inset w-full p-3 mb-4">
+                <input type="password" id="register-password" placeholder="Password" class="neumorphic-inset w-full p-3 mb-4">
+                <input type="text" id="register-school-code" placeholder="School Code" class="neumorphic-inset w-full p-3 mb-4">
+                <select id="register-role" class="neumorphic-inset w-full p-3 mb-4" onchange="toggleGamificationMode()">
+                    <option value="">Select Role</option>
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                </select>
+                <select id="register-gamification-mode" class="neumorphic-inset w-full p-3 mb-4 hidden">
+                    <option value="">Select Gamification Mode</option>
+                    <option value="competence">Competence</option>
+                    <option value="autonomy">Autonomy</option>
+                    <option value="relatedness">Relatedness</option>
+                </select>
+                <button onclick="register()" class="neumorphic-button w-full py-3 px-4 text-white font-semibold mb-4">Register</button>
+                <p class="text-center text-gray-600">Already have an account? <a href="#" onclick="showLoginForm()" class="text-indigo-600 font-semibold">Login</a></p>
+            </div>
         </div>
     </div>
-</div>
 
 <div class="flex h-screen">
     <div id="sidebar" class="neumorphic w-64 p-6 flex flex-col justify-between hidden">
@@ -1086,47 +1100,108 @@ window.login = async function() {
     }
 }
 
-// Register function
-window.register = async function() {
-    const email = document.getElementById('register-email').value;
-    const password = document.getElementById('register-password').value;
-    const fullName = document.getElementById('register-fullname').value;
-    const role = document.getElementById('register-role').value;
-    const schoolCode = document.getElementById('register-school-code').value;
-    let gamificationMode = document.getElementById('register-gamification-mode').value;
+window.showLoginForm = function() {
+    document.getElementById('login-container').classList.remove('hidden');
+    document.getElementById('register-container').classList.add('hidden');
+    document.getElementById('auth-title').textContent = 'Login';
+};
 
-    if (role === 'student') {
-        // For students, get the gamification mode from the school
-        const schoolRef = ref(db, `schools/${schoolCode}`);
-        const schoolSnapshot = await get(schoolRef);
-        if (schoolSnapshot.exists()) {
-            gamificationMode = schoolSnapshot.val().gamificationMode;
-        } else {
-            alert('Invalid school code');
-            return;
-        }
-    }
+window.showRegisterForm = function() {
+    document.getElementById('login-container').classList.add('hidden');
+    document.getElementById('register-container').classList.remove('hidden');
+    document.getElementById('auth-title').textContent = 'Register';
+};
 
-    try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
+let selectedGamificationMode = '';
 
-        // Save additional user info to the database
-        await set(ref(db, `users/${user.uid}`), {
-            fullName: fullName,
-            role: role,
-            schoolCode: schoolCode,
-            gamificationMode: gamificationMode
-        });
-
-        alert('Registration successful! You can now log in.');
-        showLogin(); // Switch to login view
-    } catch (error) {
-        console.error('Registration failed:', error);
-        alert('Registration failed: ' + error.message);
+window.toggleGamificationMode = function() {
+    const roleSelect = document.getElementById('register-role');
+    const gamificationModeSelect = document.getElementById('register-gamification-mode');
+    
+    if (roleSelect.value === 'teacher') {
+        gamificationModeSelect.classList.remove('hidden');
+    } else {
+        gamificationModeSelect.classList.add('hidden');
+        gamificationModeSelect.value = ''; // Reset the selection
     }
 }
 
+window.selectGamificationMode = function(mode) {
+    selectedGamificationMode = mode;
+    console.log('Selected gamification mode:', mode); // Debugging line
+};
+
+
+window.register = async function() {
+    const name = document.getElementById('register-name').value;
+    const email = document.getElementById('register-email').value;
+    const password = document.getElementById('register-password').value;
+    const schoolCode = document.getElementById('register-school-code').value;
+    const role = document.getElementById('register-role').value;
+    const gamificationMode = document.getElementById('register-gamification-mode').value;
+
+    if (!name || !email || !password || !schoolCode || !role) {
+        alert('Please fill in all required fields');
+        return;
+    }
+
+    if (role === 'teacher' && !gamificationMode) {
+        alert('Please select a gamification mode');
+        return;
+    }
+
+    try {
+        // Create user
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Check if school exists
+        const schoolRef = ref(db, `schools/${schoolCode}`);
+        const schoolSnapshot = await get(schoolRef);
+
+        if (!schoolSnapshot.exists() && role === 'teacher') {
+            // Create new school if it doesn't exist and user is a teacher
+            await set(schoolRef, {
+                gamificationMode: gamificationMode
+            });
+        }
+
+        let assignedGamificationMode = gamificationMode;
+        if (role === 'student') {
+            // Get the gamification mode for the student's school
+            if (schoolSnapshot.exists()) {
+                assignedGamificationMode = schoolSnapshot.val().gamificationMode;
+            } else {
+                alert('School code is not valid for students.');
+                return;
+            }
+        }
+
+        // Save user data
+        const userData = {
+            email: email,
+            fullName: name,
+            role: role,
+            schoolCode: schoolCode,
+            gamificationMode: assignedGamificationMode // Assign the mode
+        };
+
+        await set(ref(db, `users/${user.uid}`), userData);
+
+        console.log('User registered successfully:', user.uid);
+        alert('Registration successful!');
+        showLoginForm();
+    } catch (error) {
+        console.error('Error during registration:', error);
+        alert('Registration failed: ' + error.message);
+    }
+};
+
+// Add this to ensure the gamification mode container is hidden initially
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('gamification-mode-container').style.display = 'none';
+    console.log('DOM loaded, gamification mode container hidden'); // Debugging line
+});
 // Load dashboard
 async function loadDashboard(user) {
     try {
@@ -1172,24 +1247,28 @@ function updateSidebarContent(role, mode) {
     if (mode === 'competence') {
         modeSpecificItems = `
             <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showLeaderboard()">Leaderboard</div>
-            <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showProgress()">My Progress</div>
-            <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showBadges()">My Badges</div>
         `;
         if (role === 'teacher') {
             teacherActions = `
-                <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showStudentProgress()">Student Progress</div>
-                <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showBadgeManagement()">Manage Badges</div>
+                <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showLessonManagement()">Manage Lessons</div>
+                <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showPointsAward()">Award Points</div>
+                <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showResetGamification()">Reset Gamification</div>
+            `;
+        } else {
+            modeSpecificItems += `
+                <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showProgress()">My Progress</div>
             `;
         }
     } else if (mode === 'autonomy') {
         modeSpecificItems = `
             <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showThemeSelection()">Theme Selection</div>
             <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showAvatarCustomization()">Avatar Customization</div>
-            <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showPomodoroTimer()">Pomodoro Timer</div>
+            <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showPomodoro()">Pomodoro Timer</div>
             <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showMicroblog()">My Microblog</div>
         `;
         if (role === 'teacher') {
             teacherActions = `
+                <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showLessonManagement()">Manage Lessons</div>
                 <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showStudentMicroblogs()">Student Microblogs</div>
             `;
         }
@@ -1199,7 +1278,9 @@ function updateSidebarContent(role, mode) {
         `;
         if (role === 'teacher') {
             teacherActions = `
+                <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showLessonManagement()">Manage Lessons</div>
                 <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showTeamManagement()">Manage Teams</div>
+                <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showResetTeamGamification()">Reset Team Gamification</div>
             `;
         } else {
             modeSpecificItems += `
@@ -1225,10 +1306,7 @@ function updateSidebarContent(role, mode) {
             </div>
         `;
     }
-
-    
 }
-
 // Load specific content based on user role and gamification mode
 function loadSpecificContent(userData) {
     const mainContent = document.getElementById('main-content');
@@ -1585,6 +1663,56 @@ window.showPointsAward = function() {
     loadStudentList();
 }
 
+window.showResetGamification = function() {
+    const mainContent = document.getElementById('main-content');
+    mainContent.innerHTML = `
+        <h2 class="text-2xl font-bold mb-4">Reset Gamification</h2>
+        <div class="neumorphic p-6">
+            <p class="mb-4">Warning: This action will reset all points, badges, and the leaderboard for all students in your school. This action cannot be undone.</p>
+            <button onclick="confirmResetGamification()" class="neumorphic-button py-2 px-4 text-red-600 font-semibold">Reset All Gamification Data</button>
+        </div>
+    `;
+}
+
+window.confirmResetGamification = function() {
+    if (confirm("Are you sure you want to reset all gamification data? This action cannot be undone.")) {
+        resetGamificationData();
+    }
+}
+
+async function resetGamificationData() {
+    const user = auth.currentUser;
+    try {
+        const userRef = ref(db, `users/${user.uid}`);
+        const userSnapshot = await get(userRef);
+        const userData = userSnapshot.val();
+        const schoolCode = userData.schoolCode;
+
+        // Reset leaderboard
+        await set(ref(db, `schools/${schoolCode}/leaderboard`), null);
+
+        // Reset all students' points and badges
+        const usersRef = ref(db, 'users');
+        const snapshot = await get(usersRef);
+        const updates = {};
+
+        snapshot.forEach((childSnapshot) => {
+            const studentData = childSnapshot.val();
+            if (studentData.role === 'student' && studentData.schoolCode === schoolCode) {
+                updates[`${childSnapshot.key}/points`] = 0;
+                updates[`${childSnapshot.key}/badges`] = null;
+            }
+        });
+
+        await update(usersRef, updates);
+
+        alert('Gamification data has been reset successfully.');
+    } catch (error) {
+        console.error('Failed to reset gamification data:', error);
+        alert('Failed to reset gamification data. Please try again.');
+    }
+}
+
 // Load student list
 async function loadStudentList() {
     try {
@@ -1742,65 +1870,165 @@ window.changeTheme = async function(theme) {
 }
 
 // Show Pomodoro timer
-window.showPomodoroTimer = function() {
+let pomodoroState = {
+    label: '',
+    tasks: [],
+    totalTime: 25 * 60, // Default 25 minutes
+    timeLeft: 25 * 60,
+    isActive: false,
+    timer: null
+};
+
+async function savePomodoroState() {
+    const user = auth.currentUser;
+    if (user) {
+        const stateToSave = {
+            label: pomodoroState.label,
+            tasks: pomodoroState.tasks,
+            totalTime: pomodoroState.totalTime,
+            timeLeft: pomodoroState.timeLeft,
+            isActive: pomodoroState.isActive,
+            lastUpdated: serverTimestamp()
+        };
+        try {
+            await set(ref(db, `users/${user.uid}/pomodoroState`), stateToSave);
+        } catch (error) {
+            console.error('Failed to save Pomodoro state:', error);
+        }
+    }
+}
+
+async function loadPomodoroState() {
+    const user = auth.currentUser;
+    if (user) {
+        try {
+            const snapshot = await get(ref(db, `users/${user.uid}/pomodoroState`));
+            if (snapshot.exists()) {
+                const savedState = snapshot.val();
+                pomodoroState = { ...pomodoroState, ...savedState };
+            }
+        } catch (error) {
+            console.error('Failed to load Pomodoro state:', error);
+        }
+    }
+}
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(pomodoroState.timeLeft / 60);
+    const seconds = pomodoroState.timeLeft % 60;
+    document.getElementById('timer-display').textContent = 
+        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function updateTaskList() {
+    const taskList = document.getElementById('task-list');
+    taskList.innerHTML = '';
+    pomodoroState.tasks.forEach((task, index) => {
+        if (!task.completed) {
+            const li = document.createElement('li');
+            li.className = 'flex items-center justify-between p-2 mb-2 neumorphic';
+            li.innerHTML = `
+                <span>${task.text}</span>
+                <button onclick="completeTask(${index})" class="neumorphic-button px-2 py-1">Complete</button>
+            `;
+            taskList.appendChild(li);
+        }
+    });
+}
+
+window.addTask = function() {
+    const taskInput = document.getElementById('task-input');
+    const taskText = taskInput.value.trim();
+    if (taskText) {
+        pomodoroState.tasks.push({ text: taskText, completed: false });
+        taskInput.value = '';
+        updateTaskList();
+        savePomodoroState();
+    }
+}
+
+window.completeTask = function(index) {
+    pomodoroState.tasks[index].completed = true;
+    updateTaskList();
+    savePomodoroState();
+}
+
+window.startPomodoro = function() {
+    if (!pomodoroState.isActive) {
+        pomodoroState.isActive = true;
+        document.getElementById('start-button').textContent = 'Pause';
+        pomodoroState.timer = setInterval(() => {
+            pomodoroState.timeLeft--;
+            updateTimerDisplay();
+            if (pomodoroState.timeLeft % 10 === 0) { // Save state every 10 seconds
+                savePomodoroState();
+            }
+            if (pomodoroState.timeLeft === 0) {
+                clearInterval(pomodoroState.timer);
+                pomodoroState.isActive = false;
+                document.getElementById('start-button').textContent = 'Start';
+                alert('Pomodoro completed!');
+                window.resetPomodoro();
+            }
+        }, 1000);
+    } else {
+        clearInterval(pomodoroState.timer);
+        pomodoroState.isActive = false;
+        document.getElementById('start-button').textContent = 'Start';
+    }
+    savePomodoroState();
+}
+
+window.resetPomodoro = function() {
+    clearInterval(pomodoroState.timer);
+    pomodoroState.timeLeft = pomodoroState.totalTime;
+    pomodoroState.isActive = false;
+    document.getElementById('start-button').textContent = 'Start';
+    updateTimerDisplay();
+    savePomodoroState();
+}
+
+window.updatePomodoroSettings = function() {
+    pomodoroState.label = document.getElementById('pomodoro-label').value;
+    const minutes = parseInt(document.getElementById('pomodoro-minutes').value);
+    pomodoroState.totalTime = minutes * 60;
+    pomodoroState.timeLeft = pomodoroState.totalTime;
+    updateTimerDisplay();
+    savePomodoroState();
+}
+
+window.showPomodoro = async function() {
     const mainContent = document.getElementById('main-content');
     mainContent.innerHTML = `
-        <h2 class="text-2xl font-bold mb-4">Pomodoro Timer</h2>
-        <div class="neumorphic p-4 mb-4">
-            <div id="timer" class="text-4xl font-bold text-center mb-4">25:00</div>
-            <div class="grid grid-cols-2 gap-4">
-                <button id="start-timer" class="neumorphic-button p-2">Start</button>
-                <button id="reset-timer" class="neumorphic-button p-2">Reset</button>
+        <div id="pomodoro-container" class="neumorphic p-4">
+            <h2 class="text-2xl font-bold mb-4">Customizable Pomodoro Timer</h2>
+            <div class="mb-4">
+                <input type="text" id="pomodoro-label" class="neumorphic-inset w-full p-2 mb-2" placeholder="Label (e.g., Study Session)" value="${pomodoroState.label}">
+                <div class="flex space-x-2 mb-2">
+                    <input type="number" id="pomodoro-minutes" class="neumorphic-inset w-1/3 p-2" min="1" max="120" value="${Math.floor(pomodoroState.totalTime / 60)}">
+                    <button onclick="window.updatePomodoroSettings()" class="neumorphic-button w-2/3 p-2">Update Settings</button>
+                </div>
+            </div>
+            <div id="timer-display" class="text-6xl font-bold text-center mb-4">25:00</div>
+            <div class="flex space-x-2 mb-4">
+                <button id="start-button" onclick="window.startPomodoro()" class="neumorphic-button w-1/2 p-2">Start</button>
+                <button onclick="window.resetPomodoro()" class="neumorphic-button w-1/2 p-2">Reset</button>
+            </div>
+            <div class="mb-4">
+                <h3 class="text-xl font-bold mb-2">Tasks</h3>
+                <div class="flex space-x-2 mb-2">
+                    <input type="text" id="task-input" class="neumorphic-inset w-3/4 p-2" placeholder="Enter a task">
+                    <button onclick="window.addTask()" class="neumorphic-button w-1/4 p-2">Add Task</button>
+                </div>
+                <ul id="task-list" class="space-y-2"></ul>
             </div>
         </div>
     `;
-    initPomodoroTimer();
-}
-
-// Initialize Pomodoro timer
-function initPomodoroTimer() {
-    let timer;
-    let timeLeft = 25 * 60;
-    const timerDisplay = document.getElementById('timer');
-    const startButton = document.getElementById('start-timer');
-    const resetButton = document.getElementById('reset-timer');
-
-    function updateTimerDisplay() {
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    }
-
-    startButton.addEventListener('click', function() {
-        if (timer) {
-            clearInterval(timer);
-            startButton.textContent = 'Start';
-            timer = null;
-        } else {
-            startButton.textContent = 'Pause';
-            timer = setInterval(function() {
-                timeLeft--;
-                updateTimerDisplay();
-                if (timeLeft === 0) {
-                    clearInterval(timer);
-                    alert('Pomodoro session completed!');
-                    timeLeft = 25 * 60;
-                    updateTimerDisplay();
-                    startButton.textContent = 'Start';
-                }
-            }, 1000);
-        }
-    });
-
-    resetButton.addEventListener('click', function() {
-        clearInterval(timer);
-        timeLeft = 25 * 60;
-        updateTimerDisplay();
-        startButton.textContent = 'Start';
-    });
-
+    await loadPomodoroState();
     updateTimerDisplay();
+    updateTaskList();
 }
+
 
 // Show microblog
 window.showMicroblog = function() {
@@ -2053,6 +2281,52 @@ async function loadTeamLeaderboard() {
     }
 }
 
+window.showResetTeamGamification = function() {
+    const mainContent = document.getElementById('main-content');
+    mainContent.innerHTML = `
+        <h2 class="text-2xl font-bold mb-4">Reset Team Gamification</h2>
+        <div class="neumorphic p-6">
+            <p class="mb-4">Warning: This action will reset all team points and the team leaderboard for your school. This action cannot be undone.</p>
+            <button onclick="confirmResetTeamGamification()" class="neumorphic-button py-2 px-4 text-red-600 font-semibold">Reset All Team Gamification Data</button>
+        </div>
+    `;
+}
+
+window.confirmResetTeamGamification = function() {
+    if (confirm("Are you sure you want to reset all team gamification data? This action cannot be undone.")) {
+        resetTeamGamificationData();
+    }
+}
+
+async function resetTeamGamificationData() {
+    const user = auth.currentUser;
+    try {
+        const userRef = ref(db, `users/${user.uid}`);
+        const userSnapshot = await get(userRef);
+        const userData = userSnapshot.val();
+        const schoolCode = userData.schoolCode;
+
+        // Reset team leaderboard
+        await set(ref(db, `schools/${schoolCode}/teamLeaderboard`), null);
+
+        // Reset all teams' points
+        const teamsRef = ref(db, `schools/${schoolCode}/teams`);
+        const teamsSnapshot = await get(teamsRef);
+        const updates = {};
+
+        teamsSnapshot.forEach((teamSnapshot) => {
+            updates[`${teamSnapshot.key}/points`] = 0;
+        });
+
+        await update(teamsRef, updates);
+
+        alert('Team gamification data has been reset successfully.');
+    } catch (error) {
+        console.error('Failed to reset team gamification data:', error);
+        alert('Failed to reset team gamification data. Please try again.');
+    }
+}
+
 // Show team management (for teachers)
 window.showTeamManagement = function() {
     const mainContent = document.getElementById('main-content');
@@ -2079,10 +2353,16 @@ window.showTeamManagement = function() {
                 <button onclick="awardTeamPoints(100)" class="neumorphic-button p-2">+100 Points</button>
             </div>
         </div>
+        <div class="neumorphic p-4 mb-4">
+            <h3 class="text-xl font-bold mb-2">Delete Team</h3>
+            <select id="delete-team-select" class="w-full p-2 mb-2 neumorphic-inset"></select>
+            <button onclick="deleteTeam()" class="neumorphic-button p-2 bg-red-500 text-white">Delete Team</button>
+        </div>
         <div id="teams-list"></div>
     `;
     loadTeamsAndStudents();
     loadTeamsForPointsAwarding();
+    loadTeamsForDeletion();
 }
 
 async function loadTeamsForPointsAwarding() {
@@ -2173,6 +2453,79 @@ window.assignStudentToTeam = async function() {
     }
 }
 
+async function loadTeamsForDeletion() {
+    const deleteTeamSelect = document.getElementById('delete-team-select');
+    deleteTeamSelect.innerHTML = '<option value="">Select a team to delete</option>';
+    
+    try {
+        const user = auth.currentUser;
+        const userRef = ref(db, `users/${user.uid}`);
+        const userSnapshot = await get(userRef);
+        const userData = userSnapshot.val();
+        const schoolCode = userData.schoolCode;
+
+        const teamsRef = ref(db, `schools/${schoolCode}/teams`);
+        const teamsSnapshot = await get(teamsRef);
+        
+        if (teamsSnapshot.exists()) {
+            teamsSnapshot.forEach((childSnapshot) => {
+                const teamName = childSnapshot.key;
+                const option = document.createElement('option');
+                option.value = teamName;
+                option.textContent = teamName;
+                deleteTeamSelect.appendChild(option);
+            });
+        } else {
+            console.log('No teams found');
+        }
+    } catch (error) {
+        console.error('Error loading teams for deletion:', error);
+    }
+}
+
+// Add this new function to delete a team
+window.deleteTeam = async function() {
+    const teamToDelete = document.getElementById('delete-team-select').value;
+    if (!teamToDelete) {
+        alert('Please select a team to delete.');
+        return;
+    }
+
+    if (confirm(`Are you sure you want to delete the team "${teamToDelete}"? This action cannot be undone.`)) {
+        const user = auth.currentUser;
+        try {
+            const userRef = ref(db, `users/${user.uid}`);
+            const userSnapshot = await get(userRef);
+            const userData = userSnapshot.val();
+            const schoolCode = userData.schoolCode;
+
+            // Delete the team
+            await remove(ref(db, `schools/${schoolCode}/teams/${teamToDelete}`));
+
+            // Remove team association from students
+            const usersRef = ref(db, 'users');
+            const usersSnapshot = await get(usersRef);
+            const updates = {};
+
+            usersSnapshot.forEach((childSnapshot) => {
+                const studentData = childSnapshot.val();
+                if (studentData.role === 'student' && studentData.schoolCode === schoolCode && studentData.team === teamToDelete) {
+                    updates[`${childSnapshot.key}/team`] = null;
+                }
+            });
+
+            await update(usersRef, updates);
+
+            alert(`Team "${teamToDelete}" has been deleted successfully.`);
+            loadTeamsAndStudents();
+            loadTeamsForPointsAwarding();
+            loadTeamsForDeletion();
+        } catch (error) {
+            console.error('Failed to delete team:', error);
+            alert('Failed to delete team. Please try again.');
+        }
+    }
+}
 // Load teams and students
 async function loadTeamsAndStudents() {
     const user = auth.currentUser;
@@ -2303,11 +2656,20 @@ function loadTeamChat(schoolCode, teamName) {
         chatElement.innerHTML = '';
         snapshot.forEach((childSnapshot) => {
             const message = childSnapshot.val();
+            const messageId = childSnapshot.key;
             const messageElement = document.createElement('div');
-            messageElement.className = 'mb-2';
+            messageElement.className = 'mb-2 p-2 bg-white rounded shadow';
+            
+            const likesCount = Object.keys(message.likes || {}).length;
+            const dislikesCount = Object.keys(message.dislikes || {}).length;
+            
             messageElement.innerHTML = `
                 <strong>${message.sender}:</strong> ${message.text}
                 <small class="text-gray-500 ml-2">${new Date(message.timestamp).toLocaleString()}</small>
+                <div class="mt-2">
+                    <button onclick="likeMessage('${messageId}')" class="like-btn mr-2">👍 ${likesCount}</button>
+                    <button onclick="dislikeMessage('${messageId}')" class="dislike-btn">👎 ${dislikesCount}</button>
+                </div>
             `;
             chatElement.appendChild(messageElement);
         });
@@ -2335,8 +2697,11 @@ window.sendTeamMessage = async function() {
         const newMessageRef = push(chatRef);
         await set(newMessageRef, {
             sender: userData.fullName,
+            senderId: user.uid,
             text: messageText,
-            timestamp: serverTimestamp()
+            timestamp: serverTimestamp(),
+            likes: {},
+            dislikes: {}
         });
 
         document.getElementById('chat-message').value = '';
@@ -2344,6 +2709,65 @@ window.sendTeamMessage = async function() {
         console.error('Failed to send team message:', error);
     }
 }
+
+async function likeMessage(messageId) {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const userRef = ref(db, `users/${user.uid}`);
+    const userSnapshot = await get(userRef);
+    const userData = userSnapshot.val();
+    const schoolCode = userData.schoolCode;
+    const teamName = userData.team;
+
+    const messageRef = ref(db, `schools/${schoolCode}/teams/${teamName}/chat/${messageId}`);
+    const messageSnapshot = await get(messageRef);
+    const messageData = messageSnapshot.val();
+
+    const likes = messageData.likes || {};
+    const dislikes = messageData.dislikes || {};
+
+    if (likes[user.uid]) {
+        // User already liked, remove the like
+        delete likes[user.uid];
+    } else {
+        // Add like and remove dislike if exists
+        likes[user.uid] = true;
+        delete dislikes[user.uid];
+    }
+
+    await update(messageRef, { likes, dislikes });
+}
+
+async function dislikeMessage(messageId) {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const userRef = ref(db, `users/${user.uid}`);
+    const userSnapshot = await get(userRef);
+    const userData = userSnapshot.val();
+    const schoolCode = userData.schoolCode;
+    const teamName = userData.team;
+
+    const messageRef = ref(db, `schools/${schoolCode}/teams/${teamName}/chat/${messageId}`);
+    const messageSnapshot = await get(messageRef);
+    const messageData = messageSnapshot.val();
+
+    const likes = messageData.likes || {};
+    const dislikes = messageData.dislikes || {};
+
+    if (dislikes[user.uid]) {
+        // User already disliked, remove the dislike
+        delete dislikes[user.uid];
+    } else {
+        // Add dislike and remove like if exists
+        dislikes[user.uid] = true;
+        delete likes[user.uid];
+    }
+
+    await update(messageRef, { likes, dislikes });
+}
+
 
 // Utility Functions
 
@@ -2618,6 +3042,42 @@ function setupTeamPointsListener(schoolCode) {
         }
     });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM fully loaded');
+    const roleSelect = document.getElementById('register-role');
+    const gamificationModeSelect = document.getElementById('register-gamification-mode');
+    
+    if (roleSelect && gamificationModeSelect) {
+        console.log('Required elements found');
+        roleSelect.addEventListener('change', toggleGamificationMode);
+        // Initially hide the gamification mode select
+        gamificationModeSelect.classList.add('hidden');
+    } else {
+        console.error('Required elements not found');
+        if (!roleSelect) console.error('register-role element not found');
+        if (!gamificationModeSelect) console.error('register-gamification-mode element not found');
+    }
+});
+
+function toggleGamificationMode() {
+    const roleSelect = document.getElementById('register-role');
+    const gamificationModeSelect = document.getElementById('register-gamification-mode');
+    
+    if (roleSelect && gamificationModeSelect) {
+        if (roleSelect.value === 'teacher') {
+            gamificationModeSelect.classList.remove('hidden');
+        } else {
+            gamificationModeSelect.classList.add('hidden');
+            gamificationModeSelect.value = ''; // Reset the selection
+        }
+    } else {
+        console.error('Elements not found in toggleGamificationMode');
+    }
+}
+
+window.likeMessage = likeMessage;
+window.dislikeMessage = dislikeMessage;
 
 </script>
 </body>
