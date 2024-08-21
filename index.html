@@ -1162,8 +1162,8 @@ function updateSidebarContent(role, mode) {
     sidebarContent.innerHTML = '';
 
     const commonItems = `
-        <div class="text-gray-300 hover:text-white cursor-pointer" onclick="showDashboard()">Dashboard</div>
-        <div class="text-gray-300 hover:text-white cursor-pointer" onclick="showLessons()">Lessons</div>
+        <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showDashboard()">Dashboard</div>
+        <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showLessons()">Lessons</div>
     `;
 
     let modeSpecificItems = '';
@@ -1171,54 +1171,48 @@ function updateSidebarContent(role, mode) {
 
     if (mode === 'competence') {
         modeSpecificItems = `
-            <div class="text-gray-300 hover:text-white cursor-pointer" onclick="showLeaderboard()">Leaderboard</div>
+            <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showLeaderboard()">Leaderboard</div>
+            <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showProgress()">My Progress</div>
+            <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showBadges()">My Badges</div>
         `;
         if (role === 'teacher') {
             teacherActions = `
-                <div class="text-gray-300 hover:text-white cursor-pointer" onclick="showPointsAward()">Award Points</div>
-            `;
-        } else {
-            modeSpecificItems += `
-                <div class="text-gray-300 hover:text-white cursor-pointer" onclick="showProgress()">My Progress</div>
+                <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showStudentProgress()">Student Progress</div>
+                <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showBadgeManagement()">Manage Badges</div>
             `;
         }
     } else if (mode === 'autonomy') {
         modeSpecificItems = `
-            <div class="text-gray-300 hover:text-white cursor-pointer" onclick="showThemeSelection()">Theme Selection</div>
-            <div class="text-gray-300 hover:text-white cursor-pointer" onclick="showPomodoroTimer()">Pomodoro Timer</div>
+            <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showThemeSelection()">Theme Selection</div>
+            <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showAvatarCustomization()">Avatar Customization</div>
+            <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showPomodoroTimer()">Pomodoro Timer</div>
+            <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showMicroblog()">My Microblog</div>
         `;
         if (role === 'teacher') {
             teacherActions = `
-                <div class="text-gray-300 hover:text-white cursor-pointer" onclick="showStudentMicroblogs()">Student Microblogs</div>
-            `;
-        } else {
-            modeSpecificItems += `
-                <div class="text-gray-300 hover:text-white cursor-pointer" onclick="showMicroblog()">My Microblog</div>
+                <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showStudentMicroblogs()">Student Microblogs</div>
             `;
         }
     } else if (mode === 'relatedness') {
         modeSpecificItems = `
-            <div class="text-gray-300 hover:text-white cursor-pointer" onclick="showTeamLeaderboard()">Team Leaderboard</div>
+            <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showTeamLeaderboard()">Team Leaderboard</div>
         `;
         if (role === 'teacher') {
             teacherActions = `
-                <div class="text-gray-300 hover:text-white cursor-pointer" onclick="showTeamManagement()">Manage Teams</div>
+                <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showTeamManagement()">Manage Teams</div>
             `;
         } else {
             modeSpecificItems += `
-                <div class="text-gray-300 hover:text-white cursor-pointer" onclick="showTeamInfo()">My Team</div>
+                <div class="text-gray-300 hover:text-white cursor-pointer mb-2" onclick="showTeamInfo()">My Team</div>
             `;
         }
     }
 
     sidebarContent.innerHTML = `
-        <div class="mb-4">
-            <h3 class="text-lg font-semibold mb-2 text-white">${mode.charAt(0).toUpperCase() + mode.slice(1)} Mode</h3>
-            <div class="space-y-2">
-                ${commonItems}
-                ${modeSpecificItems}
-            </div>
-        </div>
+        ${commonItems}
+        <div class="mb-4"></div>
+        <h3 class="text-white text-lg font-semibold mb-2">${mode.charAt(0).toUpperCase() + mode.slice(1)} Mode</h3>
+        ${modeSpecificItems}
     `;
 
     if (role === 'teacher') {
@@ -1226,12 +1220,13 @@ function updateSidebarContent(role, mode) {
             <div class="mt-6">
                 <h4 class="text-lg font-semibold mb-2 text-white">Teacher Actions</h4>
                 <div class="space-y-2">
-                    <div class="text-gray-300 hover:text-white cursor-pointer" onclick="showLessonManagement()">Manage Lessons</div>
                     ${teacherActions}
                 </div>
             </div>
         `;
     }
+
+    
 }
 
 // Load specific content based on user role and gamification mode
@@ -2001,10 +1996,20 @@ function loadStudentPosts(studentId) {
 // Relatedness Mode Functions
 
 // Show team leaderboard
-window.showTeamLeaderboard = function() {
+window.showTeamLeaderboard = async function() {
+    const user = auth.currentUser;
+    const userRef = ref(db, `users/${user.uid}`);
+    const userSnapshot = await get(userRef);
+    const userData = userSnapshot.val();
+    const schoolCode = userData.schoolCode;
+
     const mainContent = document.getElementById('main-content');
-    mainContent.innerHTML = '<h2 class="text-2xl font-bold mb-4">Team Leaderboard</h2><div id="team-leaderboard-list"></div>';
-    loadTeamLeaderboard();
+    mainContent.innerHTML = `
+        <h2 class="text-2xl font-bold mb-4">Team Leaderboard</h2>
+        <ul id="team-leaderboard-list" class="space-y-2"></ul>
+    `;
+
+    setupTeamPointsListener(schoolCode);
 }
 
 // Load team leaderboard
@@ -2064,10 +2069,52 @@ window.showTeamManagement = function() {
             <select id="team-select" class="w-full p-2 mb-2 neumorphic-inset"></select>
             <button onclick="assignStudentToTeam()" class="neumorphic-button p-2">Assign Student</button>
         </div>
+        <div class="neumorphic p-4 mb-4">
+            <h3 class="text-xl font-bold mb-2">Award Points to Team</h3>
+            <select id="team-points-select" class="w-full p-2 mb-2 neumorphic-inset"></select>
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="awardTeamPoints(10)" class="neumorphic-button p-2">+10 Points</button>
+                <button onclick="awardTeamPoints(20)" class="neumorphic-button p-2">+20 Points</button>
+                <button onclick="awardTeamPoints(50)" class="neumorphic-button p-2">+50 Points</button>
+                <button onclick="awardTeamPoints(100)" class="neumorphic-button p-2">+100 Points</button>
+            </div>
+        </div>
         <div id="teams-list"></div>
     `;
     loadTeamsAndStudents();
+    loadTeamsForPointsAwarding();
 }
+
+async function loadTeamsForPointsAwarding() {
+    const teamPointsSelect = document.getElementById('team-points-select');
+    teamPointsSelect.innerHTML = '<option value="">Select a team</option>';
+    
+    try {
+        const user = auth.currentUser;
+        const userRef = ref(db, `users/${user.uid}`);
+        const userSnapshot = await get(userRef);
+        const userData = userSnapshot.val();
+        const schoolCode = userData.schoolCode;
+
+        const teamsRef = ref(db, `schools/${schoolCode}/teams`);
+        const teamsSnapshot = await get(teamsRef);
+        
+        if (teamsSnapshot.exists()) {
+            teamsSnapshot.forEach((childSnapshot) => {
+                const teamName = childSnapshot.key;
+                const option = document.createElement('option');
+                option.value = teamName;
+                option.textContent = teamName;
+                teamPointsSelect.appendChild(option);
+            });
+        } else {
+            console.log('No teams found');
+        }
+    } catch (error) {
+        console.error('Error loading teams for points awarding:', error);
+    }
+}
+
 
 // Create a new team
 window.createTeam = async function() {
@@ -2361,7 +2408,217 @@ document.addEventListener('click', function(e) {
         }, 600);
     }
 });
-    // (I'll provide the full JavaScript in the next part)
+
+window.showAvatarCustomization = function() {
+    const mainContent = document.getElementById('main-content');
+    mainContent.innerHTML = `
+        <h2 class="text-2xl font-bold mb-4">Avatar Customization</h2>
+        <div id="avatar-customization" class="neumorphic p-6">
+            <h3 class="text-xl font-semibold mb-4 text-indigo-600">Customize Your Avatar</h3>
+            <img id="avatar-preview" src="https://avataaars.io/?avatarStyle=Circle" alt="Avatar" class="w-32 h-32 rounded-full mx-auto mb-4" />
+            <button onclick="randomizeAvatar()" class="neumorphic-button w-full py-2 px-4 text-indigo-600 font-semibold mb-4">Randomize Avatar</button>
+            <button onclick="saveAvatar()" class="neumorphic-button w-full py-2 px-4 text-indigo-600 font-semibold">Save Avatar</button>
+        </div>
+    `;
+    loadAvatar();
+}
+window.randomizeAvatar = function() {
+    const avatarParams = {
+        topType: getRandomTopType(),
+        accessoriesType: getRandomAccessoriesType(),
+        hairColor: getRandomHairColor(),
+        facialHairType: getRandomFacialHairType(),
+        facialHairColor: getRandomFacialHairColor(),
+        clotheType: getRandomClotheType(),
+        clotheColor: getRandomClotheColor(),
+        eyeType: getRandomEyeType(),
+        eyebrowType: getRandomEyebrowType(),
+        mouthType: getRandomMouthType(),
+        skinColor: getRandomSkinColor(),
+    };
+
+    const avatarUrl = `https://avataaars.io/?${new URLSearchParams(avatarParams)}`;
+    document.getElementById('avatar-preview').src = avatarUrl;
+}
+
+window.saveAvatar = async function() {
+    const avatarUrl = document.getElementById('avatar-preview').src;
+    const user = auth.currentUser;
+
+    if (user) {
+        try {
+            await update(ref(db, 'users/' + user.uid), { avatarUrl: avatarUrl });
+            alert('Avatar saved successfully!');
+        } catch (error) {
+            alert('Failed to save avatar: ' + error.message);
+        }
+    }
+}
+
+window.getRandomTopType = function() {
+    const topTypes = [
+        'NoHair', 'Eyepatch', 'Hat', 'Hijab', 'Turban', 'WinterHat1', 'LongHairStraight',
+        'LongHairCurvy', 'ShortHairShortCurly', 'ShortHairShaggyMullet'
+    ];
+    return topTypes[Math.floor(Math.random() * topTypes.length)];
+}
+
+window.getRandomAccessoriesType = function() {
+    const accessoriesTypes = ['Blank', 'Kurt', 'Prescription02', 'Round'];
+    return accessoriesTypes[Math.floor(Math.random() * accessoriesTypes.length)];
+}
+
+window.getRandomHairColor = function() {
+    const hairColors = ['Auburn', 'Black', 'Blonde', 'BrownDark', 'Red', 'SilverGray'];
+    return hairColors[Math.floor(Math.random() * hairColors.length)];
+}
+
+window.getRandomFacialHairType = function() {
+    const facialHairTypes = ['Blank', 'BeardLight', 'MoustacheFancy'];
+    return facialHairTypes[Math.floor(Math.random() * facialHairTypes.length)];
+}
+
+window.getRandomFacialHairColor = function() {
+    const facialHairColors = ['Black', 'BrownDark', 'Red'];
+    return facialHairColors[Math.floor(Math.random() * facialHairColors.length)];
+}
+
+window.getRandomClotheType = function() {
+    const clotheTypes = ['BlazerShirt', 'BlazerSweater', 'Hoodie', 'Overall'];
+    return clotheTypes[Math.floor(Math.random() * clotheTypes.length)];
+}
+
+window.getRandomClotheColor = function() {
+    const clotheColors = ['PastelBlue', 'PastelGreen', 'PastelOrange', 'PastelRed'];
+    return clotheColors[Math.floor(Math.random() * clotheColors.length)];
+}
+
+window.getRandomEyeType = function() {
+    const eyeTypes = ['Close', 'Cry', 'Happy', 'Hearts'];
+    return eyeTypes[Math.floor(Math.random() * eyeTypes.length)];
+}
+
+window.getRandomEyebrowType = function() {
+    const eyebrowTypes = ['Angry', 'Default', 'FlatNatural', 'RaisedExcited'];
+    return eyebrowTypes[Math.floor(Math.random() * eyebrowTypes.length)];
+}
+
+window.getRandomMouthType = function() {
+    const mouthTypes = ['Smile', 'Disbelief', 'Serious', 'ScreamOpen'];
+    return mouthTypes[Math.floor(Math.random() * mouthTypes.length)];
+}
+
+window.getRandomSkinColor = function() {
+    const skinColors = ['Light', 'Brown', 'Black', 'Pale'];
+    return skinColors[Math.floor(Math.random() * skinColors.length)];
+}
+
+window.loadAvatar = async function() {
+    const user = auth.currentUser;
+    if (user) {
+        const userSnapshot = await get(ref(db, 'users/' + user.uid));
+        if (userSnapshot.exists()) {
+            const userData = userSnapshot.val();
+            const avatarUrl = userData.avatarUrl || 'https://avataaars.io/?avatarStyle=Circle';
+            document.getElementById('avatar-preview').src = avatarUrl;
+        }
+    }
+}
+window.awardTeamPoints = async function(points) {
+    const teamSelect = document.getElementById('team-points-select');
+    const selectedTeamName = teamSelect.value;
+
+    if (!selectedTeamName) {
+        alert('Please select a team first.');
+        return;
+    }
+
+    try {
+        const user = auth.currentUser;
+        const userRef = ref(db, `users/${user.uid}`);
+        const userSnapshot = await get(userRef);
+        const userData = userSnapshot.val();
+        const schoolCode = userData.schoolCode;
+
+        const teamRef = ref(db, `schools/${schoolCode}/teams/${selectedTeamName}`);
+        const teamSnapshot = await get(teamRef);
+
+        if (teamSnapshot.exists()) {
+            const teamData = teamSnapshot.val();
+            const newPoints = (teamData.points || 0) + points;
+
+            await update(teamRef, { points: newPoints });
+            alert(`Successfully awarded ${points} points to ${selectedTeamName}!`);
+            // The listener will automatically update the leaderboard
+        } else {
+            alert('Selected team not found.');
+        }
+    } catch (error) {
+        console.error('Error awarding team points:', error);
+        alert('Failed to award points. Please try again.');
+    }
+}
+
+async function populateTeamSelect() {
+    const teamSelect = document.getElementById('team-select');
+    teamSelect.innerHTML = '<option value="">Select a team</option>';
+
+    try {
+        const teamsSnapshot = await get(ref(db, 'teams'));
+        if (teamsSnapshot.exists()) {
+            const teamsData = teamsSnapshot.val();
+            for (const teamId in teamsData) {
+                const team = teamsData[teamId];
+                const option = document.createElement('option');
+                option.value = teamId;
+                option.textContent = team.name;
+                teamSelect.appendChild(option);
+            }
+        }
+    } catch (error) {
+        console.error('Error populating team select:', error);
+    }
+}
+
+function updateTeamLeaderboard(teamsData) {
+    const leaderboardList = document.getElementById('team-leaderboard-list');
+    if (!leaderboardList) return; // Exit if the leaderboard element doesn't exist
+
+    leaderboardList.innerHTML = '';
+    
+    const sortedTeams = Object.entries(teamsData)
+        .sort(([, a], [, b]) => (b.points || 0) - (a.points || 0));
+
+    sortedTeams.forEach(([teamName, teamData], index) => {
+        const listItem = document.createElement('li');
+        listItem.className = 'mb-2 p-2 bg-white rounded shadow';
+        listItem.innerHTML = `
+            <span class="font-bold">${index + 1}.</span>
+            <span class="ml-2">${teamName}:</span>
+            <span class="ml-2 font-semibold">${teamData.points || 0} points</span>
+        `;
+        leaderboardList.appendChild(listItem);
+    });
+}
+
+function initRelatednessMode() {
+    showTeamLeaderboard();
+    if (currentUserRole === 'teacher') {
+        showTeamManagement();
+    } else {
+        showTeamInfo();
+    }
+}
+
+function setupTeamPointsListener(schoolCode) {
+    const teamsRef = ref(db, `schools/${schoolCode}/teams`);
+    onValue(teamsRef, (snapshot) => {
+        if (snapshot.exists()) {
+            updateTeamLeaderboard(snapshot.val());
+        }
+    });
+}
+
 </script>
 </body>
 </html>
