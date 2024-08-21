@@ -139,28 +139,95 @@ body {
 
     /* Sidebar */
     #sidebar {
-        background: var(--sidebar-bg);
-        border-right: none;
-        color: var(--sidebar-text);
-        padding: 20px;
-        border-radius: 0 20px 20px 0;
-        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
-    }
+    background: linear-gradient(to bottom, #4338ca, #3730a3);
+    color: white;
+    min-height: 100vh;
+    width: 250px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    font-family: 'Arial', sans-serif;
+}
 
-    #sidebar h2 {
-        font-size: 24px;
-        margin-bottom: 20px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-    }
+#sidebar h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #f3f4f6;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
 
-    #sidebar ul li {
-        margin-bottom: 10px;
-        transition: all 0.3s ease;
-    }
+#sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
 
-    #sidebar ul li:hover {
-        transform: translateX(5px);
-    }
+#sidebar li {
+    margin-bottom: 0.5rem;
+}
+
+#sidebar a {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: #e0e7ff;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+#sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+#sidebar .mode-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #a5b4fc;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    padding-left: 1rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+#sidebar svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.75rem;
+}
+
+#logout-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#logout-button:hover {
+    background-color: #dc2626;
+}
+
+/* Add a subtle animation for the sidebar */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+#sidebar {
+    animation: fadeIn 0.5s ease-in-out;
+}
 
     /* Main Content */
     #main-content {
@@ -320,6 +387,34 @@ body {
         background: var(--accent-color);
         color: var(--sidebar-text);
         transform: rotate(5deg) scale(1.1);
+    }
+    .badge-button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        border-radius: 1rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .badge-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .badge-button .emoji {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .badge-button .badge-name {
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-align: center;
     }
 
     #avatar {
@@ -764,6 +859,137 @@ body {
         opacity: 0.7;
     }
 
+    #user-info {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+#user-info p {
+    margin: 0 0 10px 0;
+    font-size: 0.9rem;
+    color: #e0e7ff;
+}
+
+#user-info p:last-child {
+    margin-bottom: 0;
+}
+
+#user-info strong {
+    color: #a5b4fc;
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+#user-name, #user-role, #gamification-text {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+#user-name {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+#user-role, #gamification-text {
+    display: inline-block;
+    background: rgba(165, 180, 252, 0.2);
+    padding: 3px 8px;
+    border-radius: 15px;
+    font-size: 0.7rem;
+    margin-top: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+#app-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: linear-gradient(45deg, #4338ca, #3730a3);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#app-title h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+.app-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    color: #ffffff;
+}
+
+/* Add a subtle animation */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.01);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+#app-title {
+    animation: pulse 2s infinite;
+}
+
+#sidebar-toggle {
+    display: none; /* Hidden by default on larger screens */
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    background-color: #4338ca;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#sidebar-toggle:hover {
+    background-color: #3730a3;
+}
+
+@media (max-width: 768px) {
+    #sidebar-toggle {
+        display: block; /* Show on smaller screens */
+    }
+
+    #sidebar {
+        position: fixed;
+        left: -250px; /* Hide sidebar off-screen */
+        transition: left 0.3s ease;
+    }
+
+    #sidebar.active {
+        left: 0; /* Show sidebar when active */
+    }
+
+    #main-content {
+        margin-left: 0;
+    }
+}
 
     </style>
 </head>
@@ -805,17 +1031,30 @@ body {
 
 <div class="flex h-screen">
     <div id="sidebar" class="neumorphic w-64 p-6 flex flex-col justify-between hidden">
+        
         <div>
-            <h2 id="app-title" class="text-2xl font-bold text-center mb-8 text-indigo-600">GamEng!</h2>
-            <div id="user-info" class="mb-6">
-                <p class="mb-2"><strong class="text-indigo-600">Name:</strong> <span id="user-name" class="text-gray-700"></span></p>
-                <p class="mb-2"><strong class="text-indigo-600">Role:</strong> <span id="user-role" class="text-gray-700"></span></p>
-                <p><strong class="text-indigo-600">Mode:</strong> <span id="gamification-text" class="text-gray-700"></span></p>
+            <div id="app-title">
+                <svg class="app-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 6h16M4 12h16m-7 6h7"/>
+                    <path d="M12 3v18"/>
+                </svg>
+                <h1>GamEng!</h1>
+            </div>
+            <div id="user-info">
+                <p><strong>Name:</strong> <span id="user-name"></span></p>
+                <p><strong>Role:</strong> <span id="user-role"></span></p>
+                <p><strong>Mode:</strong> <span id="gamification-text"></span></p>
             </div>
             <div id="sidebar-content" class="space-y-4"></div>
         </div>
         <button onclick="logout()" class="neumorphic-button py-2 px-4 text-indigo-600 font-semibold hover:text-indigo-700">Logout</button>
     </div>
+
+    <button id="sidebar-toggle" aria-label="Toggle Sidebar">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
 
     <div id="main-content" class="flex-1 p-8 overflow-y-auto hidden">
         <div id="lesson-content">
@@ -1641,6 +1880,9 @@ function loadLeaderboard() {
     });
 }
 // Show points award (for teachers)
+// ... existing code ...
+
+// Update the showPointsAward function
 window.showPointsAward = function() {
     const mainContent = document.getElementById('main-content');
     mainContent.innerHTML = `
@@ -1649,19 +1891,147 @@ window.showPointsAward = function() {
         <div class="grid grid-cols-2 gap-4 mb-4">
             <button onclick="awardPoints(10)" class="neumorphic-button">+10 points</button>
             <button onclick="awardPoints(-10)" class="neumorphic-button">-10 points</button>
+            <button onclick="awardPoints(20)" class="neumorphic-button">+20 points</button>
+            <button onclick="awardPoints(-20)" class="neumorphic-button">-20 points</button>
             <button onclick="awardPoints(50)" class="neumorphic-button">+50 points</button>
             <button onclick="awardPoints(-50)" class="neumorphic-button">-50 points</button>
+            <button onclick="awardPoints(100)" class="neumorphic-button">+100 points</button>
+            <button onclick="awardPoints(-100)" class="neumorphic-button">-100 points</button>
         </div>
-        <h3 class="text-xl font-bold mb-2">Award Badges</h3>
-        <div class="grid grid-cols-2 gap-4">
-            <button onclick="awardBadge('First to Answer')" class="neumorphic-button">First to Answer</button>
-            <button onclick="awardBadge('Problem Solver')" class="neumorphic-button">Problem Solver</button>
-            <button onclick="awardBadge('Team Player')" class="neumorphic-button">Team Player</button>
-            <button onclick="awardBadge('Critical Thinker')" class="neumorphic-button">Critical Thinker</button>
+        <h3 class="text-xl font-bold mb-4">Award Badges</h3>
+        <div class="grid grid-cols-3 gap-4">
+            <button onclick="awardBadge('Grammar Master')" class="badge-button bg-blue-100 hover:bg-blue-200">
+                <span class="emoji">📚</span>
+                <span class="badge-name">Grammar Master</span>
+            </button>
+            <button onclick="awardBadge('Vocabulary Virtuoso')" class="badge-button bg-green-100 hover:bg-green-200">
+                <span class="emoji">📖</span>
+                <span class="badge-name">Vocabulary Virtuoso</span>
+            </button>
+            <button onclick="awardBadge('Pronunciation Pro')" class="badge-button bg-yellow-100 hover:bg-yellow-200">
+                <span class="emoji">🗣️</span>
+                <span class="badge-name">Pronunciation Pro</span>
+            </button>
+            <button onclick="awardBadge('Writing Wizard')" class="badge-button bg-purple-100 hover:bg-purple-200">
+                <span class="emoji">✍️</span>
+                <span class="badge-name">Writing Wizard</span>
+            </button>
+            <button onclick="awardBadge('Reading Champion')" class="badge-button bg-red-100 hover:bg-red-200">
+                <span class="emoji">📘</span>
+                <span class="badge-name">Reading Champion</span>
+            </button>
+            <button onclick="awardBadge('Listening Legend')" class="badge-button bg-indigo-100 hover:bg-indigo-200">
+                <span class="emoji">👂</span>
+                <span class="badge-name">Listening Legend</span>
+            </button>
+            <button onclick="awardBadge('Speaking Star')" class="badge-button bg-pink-100 hover:bg-pink-200">
+                <span class="emoji">🎤</span>
+                <span class="badge-name">Speaking Star</span>
+            </button>
+            <button onclick="awardBadge('Idiom Expert')" class="badge-button bg-teal-100 hover:bg-teal-200">
+                <span class="emoji">🧠</span>
+                <span class="badge-name">Idiom Expert</span>
+            </button>
+            <button onclick="awardBadge('Tense Tamer')" class="badge-button bg-orange-100 hover:bg-orange-200">
+                <span class="emoji">⏳</span>
+                <span class="badge-name">Tense Tamer</span>
+            </button>
+            <button onclick="awardBadge('Punctuation Perfectionist')" class="badge-button bg-gray-100 hover:bg-gray-200">
+                <span class="emoji">🔍</span>
+                <span class="badge-name">Punctuation Perfectionist</span>
+            </button>
+            <button onclick="awardBadge('Conversation Connoisseur')" class="badge-button bg-blue-100 hover:bg-blue-200">
+                <span class="emoji">💬</span>
+                <span class="badge-name">Conversation Connoisseur</span>
+            </button>
+            <button onclick="awardBadge('Essay Enthusiast')" class="badge-button bg-green-100 hover:bg-green-200">
+                <span class="emoji">📝</span>
+                <span class="badge-name">Essay Enthusiast</span>
+            </button>
         </div>
     `;
     loadStudentList();
 }
+
+// Update the showTeamManagement function
+window.showTeamManagement = function() {
+    const mainContent = document.getElementById('main-content');
+    mainContent.innerHTML = `
+        <h2 class="text-2xl font-bold mb-4">Team Management</h2>
+        <div class="neumorphic p-4 mb-4">
+            <h3 class="text-xl font-bold mb-2">Create Team</h3>
+            <input type="text" id="team-name" placeholder="Team Name" class="w-full p-2 mb-2 neumorphic-inset">
+            <button onclick="createTeam()" class="neumorphic-button p-2">Create Team</button>
+        </div>
+        <div class="neumorphic p-4 mb-4">
+            <h3 class="text-xl font-bold mb-2">Assign Student to Team</h3>
+            <select id="student-select" class="w-full p-2 mb-2 neumorphic-inset"></select>
+            <select id="team-select" class="w-full p-2 mb-2 neumorphic-inset"></select>
+            <button onclick="assignStudentToTeam()" class="neumorphic-button p-2">Assign Student</button>
+        </div>
+        <div class="neumorphic p-4 mb-4">
+            <h3 class="text-xl font-bold mb-2">Award Points to Team</h3>
+            <select id="team-points-select" class="w-full p-2 mb-2 neumorphic-inset"></select>
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="awardTeamPoints(10)" class="neumorphic-button p-2">+10 Points</button>
+                <button onclick="awardTeamPoints(-10)" class="neumorphic-button p-2">-10 Points</button>
+                <button onclick="awardTeamPoints(20)" class="neumorphic-button p-2">+20 Points</button>
+                <button onclick="awardTeamPoints(-20)" class="neumorphic-button p-2">-20 Points</button>
+                <button onclick="awardTeamPoints(50)" class="neumorphic-button p-2">+50 Points</button>
+                <button onclick="awardTeamPoints(-50)" class="neumorphic-button p-2">-50 Points</button>
+                <button onclick="awardTeamPoints(100)" class="neumorphic-button p-2">+100 Points</button>
+                <button onclick="awardTeamPoints(-100)" class="neumorphic-button p-2">-100 Points</button>
+            </div>
+        </div>
+        <div class="neumorphic p-4 mb-4">
+            <h3 class="text-xl font-bold mb-2">Delete Team</h3>
+            <select id="delete-team-select" class="w-full p-2 mb-2 neumorphic-inset"></select>
+            <button onclick="deleteTeam()" class="neumorphic-button p-2 bg-red-500 text-white">Delete Team</button>
+        </div>
+        <div id="teams-list"></div>
+    `;
+    loadTeamsAndStudents();
+    loadTeamsForPointsAwarding();
+    loadTeamsForDeletion();
+}
+
+// Update the awardTeamPoints function
+window.awardTeamPoints = async function(points) {
+    const teamSelect = document.getElementById('team-points-select');
+    const selectedTeamName = teamSelect.value;
+
+    if (!selectedTeamName) {
+        alert('Please select a team first.');
+        return;
+    }
+
+    try {
+        const user = auth.currentUser;
+        const userRef = ref(db, `users/${user.uid}`);
+        const userSnapshot = await get(userRef);
+        const userData = userSnapshot.val();
+        const schoolCode = userData.schoolCode;
+
+        const teamRef = ref(db, `schools/${schoolCode}/teams/${selectedTeamName}`);
+        const teamSnapshot = await get(teamRef);
+
+        if (teamSnapshot.exists()) {
+            const teamData = teamSnapshot.val();
+            const newPoints = (teamData.points || 0) + points;
+
+            await update(teamRef, { points: newPoints });
+            alert(`Successfully ${points > 0 ? 'awarded' : 'deducted'} ${Math.abs(points)} points ${points > 0 ? 'to' : 'from'} ${selectedTeamName}!`);
+            // The listener will automatically update the leaderboard
+        } else {
+            alert('Selected team not found.');
+        }
+    } catch (error) {
+        console.error('Error awarding team points:', error);
+        alert('Failed to update points. Please try again.');
+    }
+}
+
+// ... rest of the existing code ...
 
 window.showResetGamification = function() {
     const mainContent = document.getElementById('main-content');
@@ -1815,31 +2185,85 @@ window.showProgress = function() {
         const progress = (userData.points % 100);
 
         mainContent.innerHTML = `
-            <h2 class="text-2xl font-bold mb-4">My Progress</h2>
-            <div class="neumorphic p-4 mb-4">
-                <p>Total Points: ${userData.points || 0}</p>
-                <p>Level: ${level}</p>
-                <div class="progress-bar mt-2">
-                    <div class="progress" style="width: ${progress}%;"></div>
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <h2 class="text-2xl font-bold mb-4">My Progress</h2>
+                
+                <div class="flex items-center mb-4">
+                    <div class="bg-blue-100 rounded-full p-3 mr-4">
+                        <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Total Points</p>
+                        <p class="text-2xl font-bold">${userData.points || 0}</p>
+                    </div>
                 </div>
-                <p class="mt-2">Progress to next level: ${progress}%</p>
+                
+                <div class="flex items-center mb-4">
+                    <div class="bg-green-100 rounded-full p-3 mr-4">
+                        <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Level</p>
+                        <p class="text-2xl font-bold">${level}</p>
+                    </div>
+                </div>
+                
+                <div class="mb-2">
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm font-medium text-blue-700">Progress to next level</span>
+                        <span class="text-sm font-medium text-blue-700">${progress}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: ${progress}%"></div>
+                    </div>
+                </div>
             </div>
-            <h3 class="text-xl font-bold mb-2">Badges</h3>
-            <div id="badges-list" class="grid grid-cols-3 gap-4"></div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold mb-4">Badges</h2>
+                
+                <div id="badges-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+            </div>
         `;
 
         const badgesList = document.getElementById('badges-list');
         if (userData.badges && userData.badges.length > 0) {
             userData.badges.forEach(badge => {
                 const badgeElement = document.createElement('div');
-                badgeElement.className = 'neumorphic p-2 text-center';
-                badgeElement.textContent = badge;
+                badgeElement.className = 'bg-blue-100 rounded-lg p-4 flex flex-col items-center justify-center';
+                badgeElement.innerHTML = `
+                    <span class="text-4xl mb-2">${getBadgeEmoji(badge)}</span>
+                    <span class="text-sm font-medium text-center">${badge}</span>
+                `;
                 badgesList.appendChild(badgeElement);
             });
         } else {
-            badgesList.innerHTML = '<p>No badges earned yet.</p>';
+            badgesList.innerHTML = '<p class="col-span-full text-center text-gray-500">No badges earned yet.</p>';
         }
     });
+}
+
+// Helper function to get emoji for each badge
+function getBadgeEmoji(badge) {
+    const emojis = {
+        'Grammar Master': '📚',
+        'Vocabulary Virtuoso': '📖',
+        'Pronunciation Pro': '🗣️',
+        'Writing Wizard': '✍️',
+        'Reading Champion': '📘',
+        'Listening Legend': '👂',
+        'Speaking Star': '🎤',
+        'Idiom Expert': '🧠',
+        'Tense Tamer': '⏳',
+        'Punctuation Perfectionist': '🔍',
+        'Conversation Connoisseur': '💬',
+        'Essay Enthusiast': '📝'
+    };
+    return emojis[badge] || '🏅'; // Default emoji if badge not found
 }
 // Autonomy Mode Functions
 
@@ -2348,9 +2772,13 @@ window.showTeamManagement = function() {
             <select id="team-points-select" class="w-full p-2 mb-2 neumorphic-inset"></select>
             <div class="grid grid-cols-2 gap-2">
                 <button onclick="awardTeamPoints(10)" class="neumorphic-button p-2">+10 Points</button>
+                <button onclick="awardTeamPoints(-10)" class="neumorphic-button p-2">-10 Points</button>
                 <button onclick="awardTeamPoints(20)" class="neumorphic-button p-2">+20 Points</button>
+                <button onclick="awardTeamPoints(-20)" class="neumorphic-button p-2">-20 Points</button>
                 <button onclick="awardTeamPoints(50)" class="neumorphic-button p-2">+50 Points</button>
+                <button onclick="awardTeamPoints(-50)" class="neumorphic-button p-2">-50 Points</button>
                 <button onclick="awardTeamPoints(100)" class="neumorphic-button p-2">+100 Points</button>
+                <button onclick="awardTeamPoints(-100)" class="neumorphic-button p-2">-100 Points</button>
             </div>
         </div>
         <div class="neumorphic p-4 mb-4">
@@ -3078,6 +3506,26 @@ function toggleGamificationMode() {
 
 window.likeMessage = likeMessage;
 window.dislikeMessage = dislikeMessage;
+
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const sidebar = document.getElementById('sidebar');
+
+    sidebarToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('active');
+    });
+
+    // Close sidebar when clicking outside of it
+    document.addEventListener('click', function(event) {
+        const isClickInsideSidebar = sidebar.contains(event.target);
+        const isClickOnToggle = sidebarToggle.contains(event.target);
+
+        if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('active')) {
+            sidebar.classList.remove('active');
+        }
+    });
+});
+
 
 </script>
 </body>
