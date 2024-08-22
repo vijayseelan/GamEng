@@ -1054,6 +1054,34 @@ body {
         margin-left: 0;
     }
 }
+.resource-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.resource-item:hover::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+}
+
+.fixed {
+    transition: opacity 0.3s ease;
+}
+
+.fixed:not(.opacity-0) {
+    opacity: 1;
+}
+
+.fixed.opacity-0 {
+    opacity: 0;
+    pointer-events: none;
+}
 
     </style>
 </head>
@@ -1069,6 +1097,7 @@ body {
                 <input type="password" id="login-password" placeholder="Password" required class="neumorphic-inset w-full p-3 mb-4" />
                 <button id="login-button" onclick="login()" class="neumorphic-button w-full py-3 px-4 text-indigo-600 font-semibold mb-4">Login</button>
                 <p class="text-center text-gray-600">Don't have an account? <a href="#" onclick="showRegisterForm()" class="text-indigo-600 font-semibold">Register</a></p>
+                <p class="text-center text-gray-600"><a href="#" onclick="showForgotPasswordForm()" class="text-indigo-600 font-semibold">Forgot Password?</a></p>
             </div>
     
             <div id="register-container" class="hidden">
@@ -1089,6 +1118,11 @@ body {
                 </select>
                 <button onclick="register()" class="neumorphic-button w-full py-3 px-4 text-white font-semibold mb-4">Register</button>
                 <p class="text-center text-gray-600">Already have an account? <a href="#" onclick="showLoginForm()" class="text-indigo-600 font-semibold">Login</a></p>
+            </div>
+            <div id="forgot-password-container" class="hidden">
+                <input type="email" id="reset-email" placeholder="Email" required class="neumorphic-inset w-full p-3 mb-4" />
+                <button onclick="resetPassword()" class="neumorphic-button w-full py-3 px-4 text-indigo-600 font-semibold mb-4">Reset Password</button>
+                <p class="text-center text-gray-600"><a href="#" onclick="showLoginForm()" class="text-indigo-600 font-semibold">Back to Login</a></p>
             </div>
         </div>
     </div>
@@ -1362,6 +1396,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebas
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 import { getDatabase, ref, set, get, update, push, remove, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
+import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCYMlv_m2BcTrhm60hLroWVs0W_9SHSVfQ",
@@ -1406,6 +1441,13 @@ window.showRegisterForm = function() {
     document.getElementById('register-container').classList.remove('hidden');
     document.getElementById('auth-title').textContent = 'Register';
 };
+// Show forgot password form
+window.showForgotPasswordForm = function() {
+    document.getElementById('login-container').classList.add('hidden');
+    document.getElementById('register-container').classList.add('hidden');
+    document.getElementById('forgot-password-container').classList.remove('hidden');
+    document.getElementById('auth-title').textContent = 'Reset Password';
+}
 
 let selectedGamificationMode = '';
 
@@ -1426,6 +1468,23 @@ window.selectGamificationMode = function(mode) {
     console.log('Selected gamification mode:', mode); // Debugging line
 };
 
+window.resetPassword = async function() {
+    const email = document.getElementById('reset-email').value;
+
+    if (!email) {
+        alert('Please enter your email address');
+        return;
+    }
+
+    try {
+        await sendPasswordResetEmail(auth, email);
+        alert('Password reset email sent. Please check your inbox.');
+        showLoginForm();
+    } catch (error) {
+        console.error('Password reset failed:', error);
+        alert('Password reset failed: ' + error.message);
+    }
+}
 
 window.register = async function() {
     const name = document.getElementById('register-name').value;
@@ -1660,6 +1719,13 @@ window.showRegister = function() {
     document.getElementById('auth-title').textContent = 'Register';
 }
 
+window.showLoginForm = function() {
+    document.getElementById('login-container').classList.remove('hidden');
+    document.getElementById('register-container').classList.add('hidden');
+    document.getElementById('forgot-password-container').classList.add('hidden');
+    document.getElementById('auth-title').textContent = 'Login';
+};
+
 // Toggle gamification mode selection
 window.toggleGamificationMode = function() {
     const roleSelect = document.getElementById('register-role');
@@ -1724,26 +1790,119 @@ async function loadLessons() {
 }
 
 // Open lesson modal
+
+// Update openLessonModal function
+// Update openLessonModal function
 window.openLessonModal = async function(lessonId) {
     try {
         const lessonRef = ref(db, `lessons/${lessonId}`);
         const snapshot = await get(lessonRef);
         if (snapshot.exists()) {
             const lessonData = snapshot.val();
-            document.getElementById('modal-lesson-title').textContent = lessonData.title;
-            document.getElementById('modal-lesson-task').textContent = lessonData.task || 'No task specified.';
-            document.getElementById('modal-lesson-content').innerHTML = lessonData.content || 'No content available.';
-            document.getElementById('modal-lesson-image').src = lessonData.imageUrl || '';
-            document.getElementById('modal-lesson-pdf').href = lessonData.pdfUrl || '#';
-            document.getElementById('modal-lesson-link').href = lessonData.link || '#';
+            const modalContent = `
+                <div class="lesson-container">
+                    <div class="lesson-content">
+                        <h2 id="modal-lesson-title" class="text-2xl font-semibold mb-4 text-indigo-600">${lessonData.title}</h2>
+                        <div id="modal-lesson-task" class="text-lg mb-4">${lessonData.task || ''}</div>
+                        <div id="modal-lesson-content" class="mb-4">${lessonData.content || ''}</div>
+                    </div>
+                    <div class="lesson-resources mt-4">
+                        <h3 class="text-xl font-semibold mb-2">Resources</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${lessonData.imageUrls ? lessonData.imageUrls.map((url, index) => `
+                                <div class="resource-item">
+                                    <img src="${url}" class="w-full h-64 object-cover rounded-lg cursor-pointer shadow-lg hover:shadow-xl transition-shadow duration-300" alt="Lesson Image ${index + 1}" onclick="openImageModal('${url}')">
+                                    <p class="text-sm text-center mt-2">Image ${index + 1}</p>
+                                </div>
+                            `).join('') : ''}
+                            ${lessonData.pdfUrls ? lessonData.pdfUrls.map((url, index) => `
+                                <div class="resource-item bg-gradient-to-br from-blue-100 to-indigo-100 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1">
+                                    <div class="h-48 flex items-center justify-center p-4">
+                                        <svg class="w-24 h-24 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                    </div>
+                                    <div class="p-4 bg-white bg-opacity-80 backdrop-filter backdrop-blur-lg">
+                                        <h4 class="text-lg font-semibold mb-2 text-indigo-700">PDF Resource ${index + 1}</h4>
+                                        <button onclick="openPdfModal('${url}')" class="w-full bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition-colors duration-300 shadow-md hover:shadow-lg">View PDF</button>
+                                    </div>
+                                </div>
+                            `).join('') : ''}
+                            ${lessonData.links ? lessonData.links.map((link, index) => `
+                                <div class="resource-item bg-gradient-to-br from-green-100 to-teal-100 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1">
+                                    <div class="h-48 flex items-center justify-center p-4">
+                                        <svg class="w-24 h-24 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                                    </div>
+                                    <div class="p-4 bg-white bg-opacity-80 backdrop-filter backdrop-blur-lg">
+                                        <h4 class="text-lg font-semibold mb-2 text-teal-700">External Link ${index + 1}</h4>
+                                        <button onclick="openLinkModal('${link}')" class="w-full bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition-colors duration-300 shadow-md hover:shadow-lg">Visit Link</button>
+                                    </div>
+                                </div>
+                            `).join('') : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('lesson-modal').innerHTML = `
+                <div class="bg-white w-full h-full max-w-5xl mx-auto p-8 rounded-lg shadow-lg relative overflow-auto">
+                    <button onclick="closeLessonModal()" class="absolute top-4 right-4 text-gray-600 text-2xl font-bold">&times;</button>
+                    ${modalContent}
+                </div>
+            `;
             document.getElementById('lesson-modal').style.display = 'flex';
+            document.getElementById('lesson-modal').style.zIndex = '40';
         } else {
             alert('Lesson not found');
-        }} catch (error) {
+        }
+    } catch (error) {
         console.error('Failed to load lesson:', error);
     }
 }
 
+// Update openImageModal function to allow scrolling
+window.openImageModal = function(url) {
+    const imageModal = document.createElement('div');
+    imageModal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4';
+    imageModal.style.zIndex = '50';
+    imageModal.innerHTML = `
+        <div class="relative max-w-[95vw] max-h-[95vh] overflow-auto">
+            <img src="${url}" class="max-w-none h-auto" alt="Full size image">
+            <button onclick="this.closest('.fixed').classList.add('opacity-0'); setTimeout(() => this.closest('.fixed').remove(), 300)" class="absolute top-4 right-4 text-white text-2xl font-bold bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center">&times;</button>
+        </div>
+    `;
+    document.body.appendChild(imageModal);
+}
+
+// Update openPdfModal function
+window.openPdfModal = function(url) {
+    const pdfModal = document.createElement('div');
+    pdfModal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
+    pdfModal.style.zIndex = '50';
+    pdfModal.innerHTML = `
+        <div class="relative w-[95vw] h-[95vh] bg-white rounded-lg overflow-hidden">
+            <iframe src="${url}" class="w-full h-full rounded-lg"></iframe>
+            <button onclick="this.closest('.fixed').classList.add('opacity-0'); setTimeout(() => this.closest('.fixed').remove(), 300)" class="absolute top-4 right-4 text-gray-600 text-2xl font-bold bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg">&times;</button>
+        </div>
+    `;
+    document.body.appendChild(pdfModal);
+}
+
+// Update openLinkModal function
+window.openLinkModal = function(url) {
+    const linkModal = document.createElement('div');
+    linkModal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
+    linkModal.style.zIndex = '50';
+    linkModal.innerHTML = `
+        <div class="relative w-[95vw] h-[95vh] bg-white rounded-lg overflow-hidden">
+            <iframe src="${url}" class="w-full h-full rounded-lg" onload="this.style.display='block'" onerror="this.style.display='none'; document.getElementById('fallback-message').style.display='flex'"></iframe>
+            <div id="fallback-message" class="absolute inset-0 flex-col items-center justify-center bg-white" style="display: none;">
+                <p class="text-xl mb-4">Unable to load the content in the app.</p>
+                <a href="${url}" target="_blank" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors duration-300">Open in New Tab</a>
+            </div>
+            <button onclick="this.closest('.fixed').classList.add('opacity-0'); setTimeout(() => this.closest('.fixed').remove(), 300)" class="absolute top-4 right-4 text-gray-600 text-2xl font-bold bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg">&times;</button>
+        </div>
+    `;
+    document.body.appendChild(linkModal);
+}
 // Close lesson modal
 window.closeLessonModal = function() {
     document.getElementById('lesson-modal').style.display = 'none';
@@ -1759,15 +1918,54 @@ window.showLessonManagement = function() {
             <input type="text" id="lesson-title" placeholder="Lesson Title" class="neumorphic-inset w-full p-2 mb-2">
             <input type="text" id="lesson-task" placeholder="Lesson Task" class="neumorphic-inset w-full p-2 mb-2">
             <div id="lesson-editor" class="neumorphic-inset w-full p-2 mb-2 h-32"></div>
-            <input type="file" id="lesson-image" accept="image/*" class="neumorphic-inset w-full p-2 mb-2">
-            <input type="file" id="lesson-pdf" accept=".pdf" class="neumorphic-inset w-full p-2 mb-2">
-            <input type="text" id="lesson-link" placeholder="External Link" class="neumorphic-inset w-full p-2 mb-2">
+            <div id="image-uploads">
+                <input type="file" class="lesson-image neumorphic-inset w-full p-2 mb-2" accept="image/*" multiple>
+            </div>
+            <button onclick="addImageUpload()" class="neumorphic-button mb-2">Add Another Image</button>
+            <div id="pdf-uploads">
+                <input type="file" class="lesson-pdf neumorphic-inset w-full p-2 mb-2" accept=".pdf" multiple>
+            </div>
+            <button onclick="addPdfUpload()" class="neumorphic-button mb-2">Add Another PDF</button>
+            <div id="link-inputs">
+                <input type="text" class="lesson-link neumorphic-inset w-full p-2 mb-2" placeholder="External Link">
+            </div>
+            <button onclick="addLinkInput()" class="neumorphic-button mb-2">Add Another Link</button>
             <button onclick="saveLesson()" class="neumorphic-button">Save Lesson</button>
         </div>
         <div id="lessons-management-list"></div>
     `;
     loadLessonsForManagement();
     initQuillEditor();
+}
+
+// Add functions to dynamically add more upload fields
+window.addImageUpload = function() {
+    const imageUploads = document.getElementById('image-uploads');
+    const newUpload = document.createElement('input');
+    newUpload.type = 'file';
+    newUpload.className = 'lesson-image neumorphic-inset w-full p-2 mb-2';
+    newUpload.accept = 'image/*';
+    newUpload.multiple = true;
+    imageUploads.appendChild(newUpload);
+}
+
+window.addPdfUpload = function() {
+    const pdfUploads = document.getElementById('pdf-uploads');
+    const newUpload = document.createElement('input');
+    newUpload.type = 'file';
+    newUpload.className = 'lesson-pdf neumorphic-inset w-full p-2 mb-2';
+    newUpload.accept = '.pdf';
+    newUpload.multiple = true;
+    pdfUploads.appendChild(newUpload);
+}
+
+window.addLinkInput = function() {
+    const linkInputs = document.getElementById('link-inputs');
+    const newInput = document.createElement('input');
+    newInput.type = 'text';
+    newInput.className = 'lesson-link neumorphic-inset w-full p-2 mb-2';
+    newInput.placeholder = 'External Link';
+    linkInputs.appendChild(newInput);
 }
 
 // Initialize Quill editor
@@ -1787,9 +1985,9 @@ window.saveLesson = async function() {
     const title = document.getElementById('lesson-title').value;
     const task = document.getElementById('lesson-task').value;
     const content = document.querySelector('.ql-editor').innerHTML;
-    const image = document.getElementById('lesson-image').files[0];
-    const pdf = document.getElementById('lesson-pdf').files[0];
-    const link = document.getElementById('lesson-link').value;
+    const imageFiles = Array.from(document.querySelectorAll('.lesson-image')).flatMap(input => Array.from(input.files));
+    const pdfFiles = Array.from(document.querySelectorAll('.lesson-pdf')).flatMap(input => Array.from(input.files));
+    const links = Array.from(document.querySelectorAll('.lesson-link')).map(input => input.value).filter(link => link.trim() !== '');
 
     if (!title) {
         alert('Please enter a lesson title');
@@ -1802,20 +2000,24 @@ window.saveLesson = async function() {
             title: title,
             task: task,
             content: content,
-            link: link
+            links: links
         };
 
-        if (image) {
-            const imageRef = storageRef(storage, `lessons/${newLessonRef.key}/image`);
-            await uploadBytes(imageRef, image);
-            lessonData.imageUrl = await getDownloadURL(imageRef);
-        }
+        // Upload images
+        const imageUrls = await Promise.all(imageFiles.map(async (file, index) => {
+            const imageRef = storageRef(storage, `lessons/${newLessonRef.key}/images/image_${index}`);
+            await uploadBytes(imageRef, file);
+            return getDownloadURL(imageRef);
+        }));
+        lessonData.imageUrls = imageUrls;
 
-        if (pdf) {
-            const pdfRef = storageRef(storage, `lessons/${newLessonRef.key}/pdf`);
-            await uploadBytes(pdfRef, pdf);
-            lessonData.pdfUrl = await getDownloadURL(pdfRef);
-        }
+        // Upload PDFs
+        const pdfUrls = await Promise.all(pdfFiles.map(async (file, index) => {
+            const pdfRef = storageRef(storage, `lessons/${newLessonRef.key}/pdfs/pdf_${index}`);
+            await uploadBytes(pdfRef, file);
+            return getDownloadURL(pdfRef);
+        }));
+        lessonData.pdfUrls = pdfUrls;
 
         await set(newLessonRef, lessonData);
         alert('Lesson saved successfully!');
@@ -1826,7 +2028,6 @@ window.saveLesson = async function() {
         alert('Failed to save lesson. Please try again.');
     }
 }
-
 // Load lessons for management
 async function loadLessonsForManagement() {
     try {
@@ -1862,7 +2063,30 @@ window.editLesson = async function(lessonId) {
             document.getElementById('lesson-title').value = lessonData.title;
             document.getElementById('lesson-task').value = lessonData.task || '';
             document.querySelector('.ql-editor').innerHTML = lessonData.content || '';
-            document.getElementById('lesson-link').value = lessonData.link || '';
+            
+            // Clear existing fields
+            document.getElementById('image-uploads').innerHTML = '';
+            document.getElementById('pdf-uploads').innerHTML = '';
+            document.getElementById('link-inputs').innerHTML = '';
+            
+            // Add existing images
+            if (lessonData.imageUrls) {
+                lessonData.imageUrls.forEach(() => addImageUpload());
+            }
+            
+            // Add existing PDFs
+            if (lessonData.pdfUrls) {
+                lessonData.pdfUrls.forEach(() => addPdfUpload());
+            }
+            
+            // Add existing links
+            if (lessonData.links) {
+                lessonData.links.forEach(link => {
+                    addLinkInput();
+                    document.querySelector('.lesson-link:last-child').value = link;
+                });
+            }
+            
             document.getElementById('add-lesson-form').style.display = 'block';
             window.currentEditingLessonId = lessonId;
         } else {
