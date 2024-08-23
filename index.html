@@ -1083,6 +1083,38 @@ body {
     pointer-events: none;
 }
 
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px; /* Start off-screen */
+    width: 250px;
+    height: 100vh;
+    background-color: #f0f0f0;
+    transition: left 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+#sidebar.active {
+    left: 0;
+}
+
+@media (min-width: 768px) {
+    #sidebar {
+        left: 0;
+    }
+    
+    #main-content {
+        margin-left: 250px;
+    }
+}
+
+#main-content {
+    transition: margin-left 0.3s ease-in-out;
+}
+
+#main-content.sidebar-active {
+    margin-left: 250px;
+}
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
@@ -3843,6 +3875,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+
 
 </script>
 </body>
