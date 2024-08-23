@@ -2946,7 +2946,7 @@ window.showTeamLeaderboard = async function() {
     const mainContent = document.getElementById('main-content');
     mainContent.innerHTML = `
         <h2 class="text-2xl font-bold mb-4">Team Leaderboard</h2>
-        <ul id="team-leaderboard-list" class="space-y-2"></ul>
+        <div id="team-leaderboard-list" class="space-y-4"></div>
     `;
 
     setupTeamPointsListener(schoolCode);
@@ -3243,6 +3243,7 @@ window.deleteTeam = async function() {
     }
 }
 // Load teams and students
+// Load teams and students
 async function loadTeamsAndStudents() {
     const user = auth.currentUser;
     try {
@@ -3251,21 +3252,71 @@ async function loadTeamsAndStudents() {
         const userData = userSnapshot.val();
         const schoolCode = userData.schoolCode;
 
+        console.log('School Code:', schoolCode);
+
         const teamsRef = ref(db, `schools/${schoolCode}/teams`);
         const teamsSnapshot = await get(teamsRef);
+        
         const teamSelect = document.getElementById('team-select');
+        const studentSelect = document.getElementById('student-select');
+        const teamsList = document.getElementById('teams-list');
+
+        if (!teamSelect || !studentSelect || !teamsList) {
+            console.error('One or more required elements not found');
+            return;
+        }
+
         teamSelect.innerHTML = '<option value="">Select a team</option>';
-        teamsSnapshot.forEach((childSnapshot) => {
-            const option = document.createElement('option');
-            option.value = childSnapshot.key;
-            option.textContent = childSnapshot.key;
-            teamSelect.appendChild(option);
-        });
+        studentSelect.innerHTML = '<option value="">Select a student</option>';
+        teamsList.innerHTML = '';
+
+        if (teamsSnapshot.exists()) {
+            teamsSnapshot.forEach((childSnapshot) => {
+                const teamName = childSnapshot.key;
+                const teamData = childSnapshot.val();
+                console.log('Team:', teamName, 'Data:', teamData);
+
+                const option = document.createElement('option');
+                option.value = teamName;
+                option.textContent = teamName;
+                teamSelect.appendChild(option);
+
+                const teamElement = document.createElement('div');
+                teamElement.className = 'neumorphic p-4 mb-4';
+                teamElement.innerHTML = `
+                    <h3 class="text-xl font-bold mb-2">${teamName}</h3>
+                    <p>Points: ${teamData.points || 0}</p>
+                    <h4 class="font-bold mt-2">Members:</h4>
+                    <ul id="team-${teamName}-members" class="list-disc list-inside"></ul>
+                `;
+                teamsList.appendChild(teamElement);
+
+                const membersListElement = teamElement.querySelector(`#team-${teamName}-members`);
+                if (teamData.members && teamData.members.length > 0) {
+                    teamData.members.forEach(async (memberId) => {
+                        try {
+                            const memberRef = ref(db, `users/${memberId}`);
+                            const memberSnapshot = await get(memberRef);
+                            const memberData = memberSnapshot.val();
+                            if (memberData) {
+                                const memberListItem = document.createElement('li');
+                                memberListItem.textContent = memberData.fullName;
+                                membersListElement.appendChild(memberListItem);
+                            }
+                        } catch (error) {
+                            console.error('Error fetching member data:', error);
+                        }
+                    });
+                } else {
+                    membersListElement.innerHTML = '<li>No members yet</li>';
+                }
+            });
+        } else {
+            console.log('No teams found');
+        }
 
         const usersRef = ref(db, 'users');
         const usersSnapshot = await get(usersRef);
-        const studentSelect = document.getElementById('student-select');
-        studentSelect.innerHTML = '<option value="">Select a student</option>';
         usersSnapshot.forEach((childSnapshot) => {
             const studentData = childSnapshot.val();
             if (studentData.role === 'student' && studentData.schoolCode === schoolCode) {
@@ -3276,39 +3327,10 @@ async function loadTeamsAndStudents() {
             }
         });
 
-        const teamsList = document.getElementById('teams-list');
-        teamsList.innerHTML = '';
-        teamsSnapshot.forEach((childSnapshot) => {
-            const teamData = childSnapshot.val();
-            const teamElement = document.createElement('div');
-            teamElement.className = 'neumorphic p-4 mb-4';
-            teamElement.innerHTML = `
-                <h3 class="text-xl font-bold mb-2">${childSnapshot.key}</h3>
-                <p>Points: ${teamData.points || 0}</p>
-                <h4 class="font-bold mt-2">Members:</h4>
-                <ul id="team-${childSnapshot.key}-members" class="list-disc list-inside"></ul>
-            `;
-            teamsList.appendChild(teamElement);
-
-            const membersListElement = teamElement.querySelector(`#team-${childSnapshot.key}-members`);
-            if (teamData.members && teamData.members.length > 0) {
-                teamData.members.forEach(async (memberId) => {
-                    const memberRef = ref(db, `users/${memberId}`);
-                    const memberSnapshot = await get(memberRef);
-                    const memberData = memberSnapshot.val();
-                    const memberListItem = document.createElement('li');
-                    memberListItem.textContent = memberData.fullName;
-                    membersListElement.appendChild(memberListItem);
-                });
-            } else {
-                membersListElement.innerHTML = '<li>No members yet</li>';
-            }
-        });
     } catch (error) {
         console.error('Failed to load teams and students:', error);
     }
 }
-
 // Show team info (for students)
 window.showTeamInfo = async function() {
     const user = auth.currentUser;
@@ -3722,7 +3744,7 @@ async function populateTeamSelect() {
 
 function updateTeamLeaderboard(teamsData) {
     const leaderboardList = document.getElementById('team-leaderboard-list');
-    if (!leaderboardList) return; // Exit if the leaderboard element doesn't exist
+    if (!leaderboardList) return;
 
     leaderboardList.innerHTML = '';
     
@@ -3730,12 +3752,20 @@ function updateTeamLeaderboard(teamsData) {
         .sort(([, a], [, b]) => (b.points || 0) - (a.points || 0));
 
     sortedTeams.forEach(([teamName, teamData], index) => {
-        const listItem = document.createElement('li');
-        listItem.className = 'mb-2 p-2 bg-white rounded shadow';
+        const listItem = document.createElement('div');
+        listItem.className = 'neumorphic p-4 flex items-center justify-between';
         listItem.innerHTML = `
-            <span class="font-bold">${index + 1}.</span>
-            <span class="ml-2">${teamName}:</span>
-            <span class="ml-2 font-semibold">${teamData.points || 0} points</span>
+            <div class="flex items-center">
+                <span class="text-2xl font-bold mr-4">#${index + 1}</span>
+                <div>
+                    <h3 class="text-xl font-semibold">${teamName}</h3>
+                    <p class="text-gray-600">${teamData.members ? teamData.members.length : 0} members</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="text-3xl font-bold text-indigo-600">${teamData.points || 0}</span>
+                <p class="text-gray-600">points</p>
+            </div>
         `;
         leaderboardList.appendChild(listItem);
     });
