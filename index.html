@@ -412,9 +412,23 @@ body {
     }
 
     .badge-button .badge-name {
-        font-size: 0.8rem;
+        font-size: 1rem;
         font-weight: bold;
         text-align: center;
+        color: black !important;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        100% {
+            transform: scale(1);
+        }
     }
 
     #avatar {
@@ -478,6 +492,61 @@ body {
         box-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
     }
 
+    @keyframes badgePulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes badgeRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(5deg);
+    }
+    75% {
+        transform: rotate(-5deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.earned-badge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    animation: badgePulse 2s infinite;
+}
+
+.earned-badge:hover {
+    animation: badgeRotate 0.5s ease-in-out;
+}
+
+.earned-badge .emoji {
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.earned-badge .badge-name {
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-align: center;
+    color: black !important;
+}
     /* Lesson card styles */
     .lesson-card {
         background: var(--card-bg);
@@ -1834,38 +1903,38 @@ window.openLessonModal = async function(lessonId) {
             const modalContent = `
                 <div class="lesson-container">
                     <div class="lesson-content">
-                        <h2 id="modal-lesson-title" class="text-2xl font-semibold mb-4 text-indigo-600">${lessonData.title}</h2>
-                        <div id="modal-lesson-task" class="text-lg mb-4">${lessonData.task || ''}</div>
-                        <div id="modal-lesson-content" class="mb-4">${lessonData.content || ''}</div>
+                        <h2 id="modal-lesson-title" class="text-xl font-semibold mb-3 text-indigo-600">${lessonData.title}</h2>
+                        <div id="modal-lesson-task" class="text-base mb-3">${lessonData.task || ''}</div>
+                        <div id="modal-lesson-content" class="mb-3 text-sm">${lessonData.content || ''}</div>
                     </div>
-                    <div class="lesson-resources mt-4">
-                        <h3 class="text-xl font-semibold mb-2">Resources</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="lesson-resources mt-3">
+                        <h3 class="text-lg font-semibold mb-2">Resources</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             ${lessonData.imageUrls ? lessonData.imageUrls.map((url, index) => `
                                 <div class="resource-item">
-                                    <img src="${url}" class="w-full h-64 object-cover rounded-lg cursor-pointer shadow-lg hover:shadow-xl transition-shadow duration-300" alt="Lesson Image ${index + 1}" onclick="openImageModal('${url}')">
-                                    <p class="text-sm text-center mt-2">Image ${index + 1}</p>
+                                    <img src="${url}" class="w-full h-32 object-cover rounded-lg cursor-pointer shadow-md hover:shadow-lg transition-shadow duration-300" alt="Lesson Image ${index + 1}" onclick="openImageModal('${url}')">
+                                    <p class="text-xs text-center mt-1">Image ${index + 1}</p>
                                 </div>
                             `).join('') : ''}
                             ${lessonData.pdfUrls ? lessonData.pdfUrls.map((url, index) => `
-                                <div class="resource-item bg-gradient-to-br from-blue-100 to-indigo-100 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1">
-                                    <div class="h-48 flex items-center justify-center p-4">
-                                        <svg class="w-24 h-24 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                <div class="resource-item bg-gradient-to-br from-blue-100 to-indigo-100 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
+                                    <div class="h-24 flex items-center justify-center p-2">
+                                        <svg class="w-12 h-12 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                                     </div>
-                                    <div class="p-4 bg-white bg-opacity-80 backdrop-filter backdrop-blur-lg">
-                                        <h4 class="text-lg font-semibold mb-2 text-indigo-700">PDF Resource ${index + 1}</h4>
-                                        <button onclick="openPdfModal('${url}')" class="w-full bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition-colors duration-300 shadow-md hover:shadow-lg">View PDF</button>
+                                    <div class="p-2 bg-white bg-opacity-80 backdrop-filter backdrop-blur-lg">
+                                        <h4 class="text-sm font-semibold mb-1 text-indigo-700">PDF Resource ${index + 1}</h4>
+                                        <button onclick="openPdfModal('${url}')" class="w-full bg-indigo-500 text-white px-2 py-1 rounded text-xs hover:bg-indigo-600 transition-colors duration-300 shadow-sm hover:shadow-md">View PDF</button>
                                     </div>
                                 </div>
                             `).join('') : ''}
                             ${lessonData.links ? lessonData.links.map((link, index) => `
-                                <div class="resource-item bg-gradient-to-br from-green-100 to-teal-100 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1">
-                                    <div class="h-48 flex items-center justify-center p-4">
-                                        <svg class="w-24 h-24 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                                <div class="resource-item bg-gradient-to-br from-green-100 to-teal-100 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden">
+                                    <div class="h-24 flex items-center justify-center p-2">
+                                        <svg class="w-12 h-12 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
                                     </div>
-                                    <div class="p-4 bg-white bg-opacity-80 backdrop-filter backdrop-blur-lg">
-                                        <h4 class="text-lg font-semibold mb-2 text-teal-700">External Link ${index + 1}</h4>
-                                        <button onclick="openLinkModal('${link}')" class="w-full bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition-colors duration-300 shadow-md hover:shadow-lg">Visit Link</button>
+                                    <div class="p-2 bg-white bg-opacity-80 backdrop-filter backdrop-blur-lg">
+                                        <h4 class="text-sm font-semibold mb-1 text-teal-700">External Link ${index + 1}</h4>
+                                        <button onclick="openLinkModal('${link}')" class="w-full bg-teal-500 text-white px-2 py-1 rounded text-xs hover:bg-teal-600 transition-colors duration-300 shadow-sm hover:shadow-md">Visit Link</button>
                                     </div>
                                 </div>
                             `).join('') : ''}
@@ -1875,8 +1944,8 @@ window.openLessonModal = async function(lessonId) {
             `;
             
             document.getElementById('lesson-modal').innerHTML = `
-                <div class="bg-white w-full h-full max-w-5xl mx-auto p-8 rounded-lg shadow-lg relative overflow-auto">
-                    <button onclick="closeLessonModal()" class="absolute top-4 right-4 text-gray-600 text-2xl font-bold">&times;</button>
+                <div class="bg-white w-11/12 max-w-3xl mx-auto p-4 rounded-lg shadow-lg relative overflow-auto max-h-[90vh]">
+                    <button onclick="closeLessonModal()" class="absolute top-2 right-2 text-gray-600 text-xl font-bold">&times;</button>
                     ${modalContent}
                 </div>
             `;
@@ -1890,15 +1959,16 @@ window.openLessonModal = async function(lessonId) {
     }
 }
 
+
 // Update openImageModal function to allow scrolling
 window.openImageModal = function(url) {
     const imageModal = document.createElement('div');
-    imageModal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4';
+    imageModal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
     imageModal.style.zIndex = '50';
     imageModal.innerHTML = `
-        <div class="relative max-w-[95vw] max-h-[95vh] overflow-auto">
-            <img src="${url}" class="max-w-none h-auto" alt="Full size image">
-            <button onclick="this.closest('.fixed').classList.add('opacity-0'); setTimeout(() => this.closest('.fixed').remove(), 300)" class="absolute top-4 right-4 text-white text-2xl font-bold bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center">&times;</button>
+        <div class="bg-white w-11/12 max-w-3xl mx-auto p-4 rounded-lg shadow-lg relative overflow-auto max-h-[90vh]">
+            <button onclick="this.closest('.fixed').remove()" class="absolute top-2 right-2 text-gray-600 text-xl font-bold">&times;</button>
+            <img src="${url}" class="max-w-full h-auto mx-auto" alt="Full size image">
         </div>
     `;
     document.body.appendChild(imageModal);
@@ -1910,9 +1980,9 @@ window.openPdfModal = function(url) {
     pdfModal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
     pdfModal.style.zIndex = '50';
     pdfModal.innerHTML = `
-        <div class="relative w-[95vw] h-[95vh] bg-white rounded-lg overflow-hidden">
-            <iframe src="${url}" class="w-full h-full rounded-lg"></iframe>
-            <button onclick="this.closest('.fixed').classList.add('opacity-0'); setTimeout(() => this.closest('.fixed').remove(), 300)" class="absolute top-4 right-4 text-gray-600 text-2xl font-bold bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg">&times;</button>
+        <div class="bg-white w-11/12 max-w-3xl mx-auto p-4 rounded-lg shadow-lg relative overflow-hidden max-h-[90vh]">
+            <button onclick="this.closest('.fixed').remove()" class="absolute top-2 right-2 text-gray-600 text-xl font-bold">&times;</button>
+            <iframe src="${url}" class="w-full h-[calc(90vh-2rem)]" frameborder="0"></iframe>
         </div>
     `;
     document.body.appendChild(pdfModal);
@@ -1924,13 +1994,13 @@ window.openLinkModal = function(url) {
     linkModal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
     linkModal.style.zIndex = '50';
     linkModal.innerHTML = `
-        <div class="relative w-[95vw] h-[95vh] bg-white rounded-lg overflow-hidden">
-            <iframe src="${url}" class="w-full h-full rounded-lg" onload="this.style.display='block'" onerror="this.style.display='none'; document.getElementById('fallback-message').style.display='flex'"></iframe>
-            <div id="fallback-message" class="absolute inset-0 flex-col items-center justify-center bg-white" style="display: none;">
-                <p class="text-xl mb-4">Unable to load the content in the app.</p>
-                <a href="${url}" target="_blank" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors duration-300">Open in New Tab</a>
+        <div class="bg-white w-11/12 max-w-3xl mx-auto p-4 rounded-lg shadow-lg relative overflow-hidden max-h-[90vh]">
+            <button onclick="this.closest('.fixed').remove()" class="absolute top-2 right-2 text-gray-600 text-xl font-bold">&times;</button>
+            <iframe src="${url}" class="w-full h-[calc(90vh-2rem)]" frameborder="0" onload="this.style.display='block'" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"></iframe>
+            <div class="absolute inset-0 flex-col items-center justify-center bg-white hidden">
+                <p class="text-lg mb-4">Unable to load the content in the app.</p>
+                <a href="${url}" target="_blank" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300">Open in New Tab</a>
             </div>
-            <button onclick="this.closest('.fixed').classList.add('opacity-0'); setTimeout(() => this.closest('.fixed').remove(), 300)" class="absolute top-4 right-4 text-gray-600 text-2xl font-bold bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg">&times;</button>
         </div>
     `;
     document.body.appendChild(linkModal);
